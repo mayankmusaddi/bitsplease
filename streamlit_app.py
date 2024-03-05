@@ -7,7 +7,7 @@ ASSISTANT = "assistant"
 
 
 def app():
-    st.title("AskAI+")
+    st.title("BitsPleaseBot")
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
@@ -32,7 +32,7 @@ def app():
             )
             response = response.json()
             print("RESP: ", response)
-            bot_resp = response["choices"][0]["message"]["content"]
+            bot_resp = response["payload"]["messages"][-1]["content"]
         bot_answer = bot_resp
         try:
             bot_answer = json.loads(bot_resp)
