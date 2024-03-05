@@ -4,6 +4,7 @@ async def scrape_data(url: str) -> dict:
     The function uses Pyppeteer to open the webpage and BeautifulSoup to parse the HTML content.
     It specifically extracts the text from the 'p', 'h1', 'h2', 'h3', and 'a' tags.
     The data is returned as a dictionary where the keys are the tag names and the values are lists of the text inside those tags.
+    Why we're not using Selenium?: It doesn't support asynchronous operations natively.
 
     Parameters:
     url (str): The URL of the webpage to scrape.
