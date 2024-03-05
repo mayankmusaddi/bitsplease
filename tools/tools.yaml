@@ -1,10 +1,10 @@
-name: google_search
+name: web_search
 description: google search the user input
 schema:
   type: object
   properties:
     search_term:
       type: string
-      description: the search term
+      description: the query
     required:
-      - search_term
+      - query
