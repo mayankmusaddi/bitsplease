@@ -6,7 +6,7 @@ import time
 
 
 async def openai_call(
-    system_prompt, prompt, schema, previous_messages=[], max_attempts=3
+    system_prompt, messages=[], schema=None, response_format={"type": "text"}, max_attempts=3
 ):
     start = time.time()
 
@@ -20,18 +20,21 @@ async def openai_call(
             attempts += 1
             output, previous_messages = await get_openai_output(
                 system_prompt,
-                prompt,
-                previous_messages=previous_messages,
-                response_format={"type": "json_object"},
+                messages,
+                response_format,
             )
             print("OUTPUT: ", output, time.time() - start)
-            results = json.loads(output)
-            if not isinstance(results, list):
-                results = [results]
-            results = [result for result in results if result]
-            for result in results:
-                validate(instance=result, schema=schema)
-            success = True
+            if response_format["type"] == "json_object":
+                results = json.loads(output)
+                if not isinstance(results, list):
+                    results = [results]
+                results = [result for result in results if result]
+                for result in results:
+                    validate(instance=result, schema=schema)
+                success = True
+            else:
+                success = True
+                results = output
         except ValidationError as e:
             error_message = str(e)
             logging.error(f"ValidationError on output: {results} : {error_message}")
@@ -40,6 +43,7 @@ async def openai_call(
                 "Error: The output you sent is not in the correct JSON format. "
                 "Stick to the JSON schema specified. Do not apologize"
             )
+            messages.append({"role": "user", "content": prompt})
         except Exception as e:
             error_message = str(e)
             logging.error(f"JSONDecodeError: {output} : {error_message}")
@@ -47,6 +51,7 @@ async def openai_call(
                 "Error: The output you sent is not a valid JSON. "
                 "Do not return anything except a JSON. Do not apologize"
             )
+            messages.append({"role": "user", "content": prompt})
 
     response = {
         "results": results,
@@ -57,14 +62,14 @@ async def openai_call(
     return response, previous_messages
 
 
-def llm_router_call(messages):
+def llm_router_call(messages, response_format):
     headers = {'Content-Type': 'application/json'}
     payload = {
-        "model": "gpt-4-1106-preview",
+        "model": "gpt-4-32k",
         "messages": messages,
-        "client_identifier": "aih_9"
+        "client_identifier": "backend"
     }
-    url = "http://intuitionx-llm-router.prod0-k8singress-pz-intuition3.sprinklr.com/chat-completion"
+    url = "https://prod0-intuitionx-llm-router.sprinklr.com/chat-completion"
     response = requests.post(url, headers=headers, data=json.dumps(payload))
 
     # If the request was successful (status code 200), then return the JSON response
@@ -76,24 +81,14 @@ def llm_router_call(messages):
 
 
 async def get_openai_output(
-    system_prompt, prompt, previous_messages=[], response_format={"type": "text"}
+    system_prompt, messages, response_format
 ):
     try:
         system_message = {"role": "system", "content": system_prompt}
-        current_message = {"role": "user", "content": prompt}
-
-        if len(previous_messages) == 0:
-            previous_messages.append(system_message)
-        else:
-            if previous_messages[0]["role"] == "system":
-                previous_messages[0] = system_message
-            else:
-                previous_messages = [system_message] + previous_messages
-        previous_messages.append(current_message)
-
-        response = llm_router_call(previous_messages)
-        content = response.choices[0].message.content
-        messages = previous_messages + [{"role": "assistant", "content": content}]
+        messages = [system_message] + messages
+        response = llm_router_call(messages, response_format)
+        content = response["choices"][0]["message"]["content"]
+        messages = messages + [{"role": "assistant", "content": content}]
         return content, messages
     except Exception as e:
         raise e

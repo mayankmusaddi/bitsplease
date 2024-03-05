@@ -32,7 +32,8 @@ def app():
             )
             response = response.json()
             print("RESP: ", response)
-            bot_resp = response["payload"]["messages"][-1]["content"]
+
+            bot_resp = response["results"]
         bot_answer = bot_resp
         try:
             bot_answer = json.loads(bot_resp)

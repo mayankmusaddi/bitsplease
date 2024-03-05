@@ -3,6 +3,7 @@ import tornado
 import logging
 
 from tornado.ioloop import IOLoop
+from utils.openai_utils import openai_call
 
 PORT = 10000
 
@@ -19,11 +20,10 @@ class BaseHandler(tornado.web.RequestHandler):
         return response
 
     async def process(self, payload):
-        output = {
-            "payload": payload,
-            "success": True
-        }
-        return output
+        system_prompt = "You are a helpful assistant"
+        messages = payload["messages"]
+        response, _ = await openai_call(system_prompt, messages)
+        return response
 
 
 def main(port=PORT):
