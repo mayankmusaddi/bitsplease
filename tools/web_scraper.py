@@ -49,7 +49,7 @@ def scrape_data(url: str) -> dict:
         for tag in soup.find_all(tag_name):
             data = tag.text.strip()
             if data:
-                data = [d.encode("utf-8", "ignore").decode("utf-8") for d in data]
+                data = data.encode("utf-8", "ignore").decode("utf-8")
                 # Append the text to the list of texts for this tag
                 if tag_name in scraped_data:
                     scraped_data[tag_name].append(data)
