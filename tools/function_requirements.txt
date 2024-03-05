@@ -1,3 +1,5 @@
 beautifulsoup4
 duckduckgo_search
 requests
+selenium
+webdriver_manager
