@@ -27,7 +27,7 @@ def execute_python_code(code: str) -> str:
     Returns:
         str: The STDOUT captured from the code when it ran.
     """
-
+    ensure_compilable(code)
     tmp_code_file = NamedTemporaryFile(
         "w", dir="./", suffix=".py", encoding="utf-8"
     )
@@ -78,3 +78,10 @@ def execute_python_file(
         return result.stdout
     else:
         raise Exception(result.stderr)
+
+
+def ensure_compilable(code):
+    try:
+        compile(code, '<string>', 'exec')
+    except Exception as e:
+        raise Exception(f"Compilation error: {e}")
