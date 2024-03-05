@@ -1,0 +1,10 @@
+name: google_search
+description: google search the user input
+schema:
+  type: object
+  properties:
+    search_term:
+      type: string
+      description: the search term
+    required:
+      - search_term
