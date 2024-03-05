@@ -18,3 +18,13 @@
         description: python code
       required:
         - code
+- name: web_scraper
+  description: scrape data from the web
+  schema:
+    type: object
+    properties:
+      url:
+        type: string
+        description: the URL to scrape data from
+      required:
+        - url
