@@ -1,7 +1,3 @@
-import asyncio
-from pyppeteer import launch
-from bs4 import BeautifulSoup
-
 async def scrape_data(url: str) -> dict:
     """
     This function takes a URL as input and returns the scraped data from that URL.
@@ -15,6 +11,10 @@ async def scrape_data(url: str) -> dict:
     Returns:
     dict: A dictionary where the keys are the tag names ('p', 'h1', 'h2', 'h3', 'a') and the values are lists of the text contents of those tags.
     """
+    import asyncio
+    from pyppeteer import launch
+    from bs4 import BeautifulSoup
+    
     # Launch the browser
     browser = await launch(headless=True)
     page = await browser.newPage()
