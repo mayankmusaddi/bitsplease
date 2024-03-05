@@ -1,9 +1,9 @@
 from unittest import TestCase
-from tools.search import web_search
+from tools.web_search import web_search
 
 
-class TestSearch(TestCase):
-    def test_search(self):
+class TestWebSearch(TestCase):
+    def test_web_search(self):
         num_results = 2
         _results = web_search("who are c suite exectuives for dell?", num_results)
         assert len(_results) == num_results
