@@ -6,7 +6,7 @@ import time
 
 
 async def openai_call(
-    system_prompt, messages=[], schema=None, response_format={"type": "text"}, max_attempts=3
+    system_prompt, messages=[], schema=None, response_format={"type": "text"}, tools=[], max_attempts=3
 ):
     start = time.time()
 
@@ -21,7 +21,8 @@ async def openai_call(
             output, previous_messages = await get_openai_output(
                 system_prompt,
                 messages,
-                response_format,
+                response_format=response_format,
+                tools=tools,
             )
             print("OUTPUT: ", output, time.time() - start)
             if response_format["type"] == "json_object":
@@ -62,12 +63,14 @@ async def openai_call(
     return response, previous_messages
 
 
-def llm_router_call(messages, response_format):
+def llm_router_call(messages, response_format, tools=[]):
     headers = {'Content-Type': 'application/json'}
     payload = {
-        "model": "gpt-4-32k",
+        "client_identifier": "aih_9",
+        "model": "gpt-4-turbo-preview",
         "messages": messages,
-        "client_identifier": "backend"
+        "tools": tools,
+        "tool_choice": "auto",
     }
     url = "https://prod0-intuitionx-llm-router.sprinklr.com/chat-completion"
     response = requests.post(url, headers=headers, data=json.dumps(payload))
@@ -81,14 +84,41 @@ def llm_router_call(messages, response_format):
 
 
 async def get_openai_output(
-    system_prompt, messages, response_format
+    system_prompt, messages, response_format={"type": "text"}, tools=[]
 ):
     try:
         system_message = {"role": "system", "content": system_prompt}
         messages = [system_message] + messages
-        response = llm_router_call(messages, response_format)
-        content = response["choices"][0]["message"]["content"]
-        messages = messages + [{"role": "assistant", "content": content}]
-        return content, messages
+        response = llm_router_call(messages, response_format, tools)
+        print("LLM RESPONSE: ", response)
+
+        response_message = response["choices"][0]["message"]
+        messages.append(response_message)
+        if "tool_calls" in response_message and response_message["tool_calls"]:
+            tool_calls = response_message["tool_calls"]
+            for tool_call in tool_calls:
+                function_name = tool_call["function"]["name"]
+                function_args = json.loads(tool_call["function"]["arguments"])
+
+                # function_to_call = available_functions[function_name]
+                # function_response = function_to_call(
+                #     location=function_args.get("location"),
+                #     unit=function_args.get("unit"),
+                # )
+
+                print("Calling function:", function_name, function_args)
+                function_response = {"response": "shahrukh khan is a popular bollywood actor"}
+                messages.append(
+                    {
+                        "tool_call_id": tool_call["id"],
+                        "role": "tool",
+                        "name": function_name,
+                        "content": function_response,
+                    }
+                )  # extend conversation with function response
+            return await get_openai_output(system_prompt, messages, response_format=response_format, tools=tools)
+        if "content" in response_message:
+            content = response_message["content"]
+            return content, messages
     except Exception as e:
         raise e

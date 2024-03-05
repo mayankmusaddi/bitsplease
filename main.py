@@ -1,4 +1,5 @@
 import json
+import yaml
 import tornado
 import logging
 
@@ -22,7 +23,10 @@ class BaseHandler(tornado.web.RequestHandler):
     async def process(self, payload):
         system_prompt = "You are a helpful assistant"
         messages = payload["messages"]
-        response, _ = await openai_call(system_prompt, messages)
+        with open('tools/tools.yaml', 'r') as yaml_file:
+            yaml_data = yaml.safe_load(yaml_file)  # Load YAML data
+            tools = [{"type": "function", "function": function} for function in yaml_data]
+        response, _ = await openai_call(system_prompt, messages, tools=tools)
         return response
 
 
