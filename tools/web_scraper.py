@@ -47,11 +47,13 @@ def scrape_data(url: str) -> dict:
     for tag_name in tags_to_scrape:
         # If the tag has some text inside, add it to the dictionary
         for tag in soup.find_all(tag_name):
-            if tag.text.strip():
+            data = tag.text.strip()
+            if data:
+                data = data.encode("utf-8", "ignore").decode("utf-8")
                 # Append the text to the list of texts for this tag
                 if tag_name in scraped_data:
-                    scraped_data[tag_name].append(tag.text.strip())
+                    scraped_data[tag_name].append(data)
                 else:
-                    scraped_data[tag_name] = [tag.text.strip()]
+                    scraped_data[tag_name] = [data]
 
     return scraped_data
