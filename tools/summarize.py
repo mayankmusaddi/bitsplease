@@ -1,5 +1,4 @@
 from utils.openai_utils import openai_call
-import asyncio
 
 
 async def summarize(text: str, words: int = 100):
