@@ -4,7 +4,6 @@ async def fetch_all_products_description():
     """
     import aiofiles
     import ast
-    import json
     async with aiofiles.open('../kb/spr_products_short.txt', mode='r') as file:
         contents = file.read()
 
