@@ -53,3 +53,18 @@
         description: the vertical industry
     required:
       - vertical
+- name: send_mail
+  description: Sends a mail
+  schema:
+    type: object
+    properties:
+      msg:
+        type: string
+        description: the message of the mail that is to be sent
+    required:
+      - msg
+- name: get_reply_mail
+  description: Retrieves stored mail and creates a positive reply mail for it
+  schema:
+    type: object
+    properties: {}

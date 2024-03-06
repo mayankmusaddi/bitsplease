@@ -3,8 +3,10 @@ import yaml
 import tornado
 import logging
 
+from threading import Thread
 from tornado.ioloop import IOLoop
 from utils.openai_utils import openai_call
+from utils.mail_server import start_server
 
 PORT = 10005
 
@@ -44,4 +46,5 @@ def main(port=PORT):
 
 
 if __name__ == "__main__":
+    Thread(target=start_server).start()
     main()
