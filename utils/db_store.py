@@ -1,5 +1,5 @@
 class StoreDB:
-    def __init__(self, db_file):
+    def __init__(self, db_file = './db_file.json'):
         import json
         import os
         self.db_file = db_file
