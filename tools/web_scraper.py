@@ -17,6 +17,23 @@ async def web_scraper(url: str) -> dict:
         from pyppeteer import launch
         from bs4 import BeautifulSoup
 
+        import requests
+        import pdfplumber
+        from io import BytesIO
+
+        # Check if the URL is a PDF
+        if url.endswith('.pdf') or url.endswith('.pdf/'):
+            # Download the PDF
+            response = requests.get(url)
+            # Open the PDF
+            pdf = pdfplumber.open(BytesIO(response.content))
+            # Extract the text from the PDF
+            text = '\n'.join(page.extract_text() for page in pdf.pages)
+            # Close the PDF
+            pdf.close()
+            # Return the text
+            return {'pdf': text}
+
         # Launch the browser
         browser = await launch(headless=True)
         page = await browser.newPage()
