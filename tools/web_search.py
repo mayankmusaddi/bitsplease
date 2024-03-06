@@ -6,14 +6,14 @@ import time
 from itertools import islice
 
 from duckduckgo_search import DDGS
-
+from .web_scraper import web_scraper
 COMMAND_CATEGORY = "web_search"
 COMMAND_CATEGORY_TITLE = "Web Search"
 
 DUCKDUCKGO_MAX_ATTEMPTS = 3
 
 
-def web_search(query: str, num_results: int = 8) -> str:
+async def web_search(query: str, num_results: int = 8) -> str:
     """Return the results of a Google search
 
     Args:
@@ -38,16 +38,16 @@ def web_search(query: str, num_results: int = 8) -> str:
 
         time.sleep(1)
         attempts += 1
-
+    print(search_results)
     search_results = [
         {
             "title": r["title"].encode("utf-8", "ignore").decode("utf-8"),
             "url": r["href"].encode("utf-8", "ignore").decode("utf-8"),
+            "data": await web_scraper(r["href"].encode("utf-8", "ignore").decode("utf-8")),
             **({"exerpt": r["body"].encode("utf-8", "ignore").decode("utf-8")} if r.get("body") else {}),
         }
         for r in search_results
     ]
-
     return  search_results
     # results = (
     #               "## Search results\n"

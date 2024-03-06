@@ -3,7 +3,7 @@ import json
 import logging
 from jsonschema import validate, ValidationError
 import time
-
+from tools import available_functions
 
 async def openai_call(
     system_prompt, messages=[], schema=None, response_format={"type": "text"}, tools=[], max_attempts=3
@@ -67,7 +67,7 @@ def llm_router_call(messages, response_format, tools=[]):
     headers = {'Content-Type': 'application/json'}
     payload = {
         "client_identifier": "aih_9",
-        "model": "gpt-3.5-turbo-1106",
+        "model": "gpt-4-turbo-preview",
         "messages": messages,
         "tools": tools,
         "tool_choice": "auto",
@@ -77,6 +77,7 @@ def llm_router_call(messages, response_format, tools=[]):
 
     # If the request was successful (status code 200), then return the JSON response
     if response.status_code == 200:
+        print(response.json())
         return response.json()
     else:
         print(f"Error: {response.status_code}")
@@ -101,15 +102,10 @@ async def get_openai_output(
             for tool_call in tool_calls:
                 function_name = tool_call["function"]["name"]
                 function_args = json.loads(tool_call["function"]["arguments"])
-
-                # function_to_call = available_functions[function_name]
-                # function_response = function_to_call(
-                #     location=function_args.get("location"),
-                #     unit=function_args.get("unit"),
-                # )
-
                 print("Calling function:", function_name, function_args)
-                function_response = {"response": "shahrukh khan is a popular bollywood actor"}
+                function_to_call = available_functions[function_name]
+                function_response = await function_to_call(**function_args)
+
 
                 messages.append(
                     {

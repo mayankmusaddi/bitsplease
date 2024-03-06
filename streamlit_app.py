@@ -27,7 +27,7 @@ def app():
         with st.spinner("Running"):
             print("REQ: ", payload)
             response = requests.post(
-                "http://localhost:10000/predict",
+                "http://localhost:10005/predict",
                 json=payload,
             )
             response = response.json()

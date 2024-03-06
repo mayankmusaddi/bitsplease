@@ -6,7 +6,7 @@ import logging
 from tornado.ioloop import IOLoop
 from utils.openai_utils import openai_call
 
-PORT = 10000
+PORT = 10005
 
 
 class BaseHandler(tornado.web.RequestHandler):
