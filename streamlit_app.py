@@ -9,11 +9,11 @@ from utils.db_store import store
 
 USER = "user"
 ASSISTANT = "assistant"
-script_stage = "collect_persona"
 SCRIPT_FILE_PATH = 'script.yaml'
 
 # Set layout to wide
 st.set_page_config(layout="wide")
+
 
 # Divide the page into 3 columns
 # col1, st, col3 = st.columns(3)
@@ -33,6 +33,7 @@ def convert_json_to_flow_chart(data):
     # Return the graph
     return g
 
+
 def get_script_data():
     global SCRIPT_FILE_PATH
     with open(SCRIPT_FILE_PATH, 'r') as yaml_file:
@@ -41,17 +42,20 @@ def get_script_data():
 
 
 def app():
-    global script_stage
     script_data = get_script_data()
     st.title("BitsPleaseBot")
     print(st.session_state)
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
+    if "script_stage" not in st.session_state:
+        st.session_state.script_stage = "collect_persona"
+
+    script_stage = st.session_state.script_stage
     st.session_state.messages.append({"role": "system",
-                                          "content": script_data[script_stage]['SYSTEM_PROMPT']})
+                                      "content": script_data[script_stage]['SYSTEM_PROMPT']})
     st.session_state.messages.append({"role": "assistant",
-                                          "content": script_data[script_stage]['INIT_PROMPT']})
+                                      "content": script_data[script_stage]['INIT_PROMPT']})
     for i, message in enumerate(
             st.session_state.messages
     ):  # display all the previous message
@@ -84,16 +88,17 @@ def app():
             for key, value in bot_answer[script_data[script_stage]['PROBING_KEYWORD']].items():
                 try:
                     store.fetch(key)
+                    store.update(key, value)
                 except Exception as e:
                     store.add(key, value)
-            script_stage = "assemble_user_tasks"
-        if script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
+            st.session_state.script_stage = "assemble_user_tasks"
+        elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
             for key, value in bot_answer[script_data[script_stage]['PROBING_KEYWORD']].items():
                 try:
                     store.fetch(key)
                 except Exception as e:
                     store.add(key, value)
-            script_stage = "finished"
+            st.session_state.script_stage = "finished"
         st.chat_message(ASSISTANT).write(bot_answer)
         st.session_state.messages.append({"role": "assistant", "content": bot_resp})
     #
@@ -116,5 +121,6 @@ def app():
     #
     #     # Wait for 2 seconds before updating
     #     time.sleep(2)
+
 
 app()
