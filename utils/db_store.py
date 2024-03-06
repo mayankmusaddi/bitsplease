@@ -13,7 +13,8 @@ class StoreDB:
         update(key, value): Updates the value associated with a key in the store.
         delete(key): Deletes a key-value pair from the store.
     """
-    def __init__(self, db_file = './db_file.json'):
+
+    def __init__(self, db_file='./db_file.json'):
         import json
         import os
         self.db_file = db_file
@@ -48,8 +49,12 @@ class StoreDB:
         self._persist()
 
     def _persist(self):
+        import json
         with open(self.db_file, 'w') as f:
             json.dump(self.db, f)
+
+
+store = StoreDB()
 
 
 """

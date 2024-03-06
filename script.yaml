@@ -1,6 +1,15 @@
-- name: "collect_persona"
-  SYSTEM_PROMPT: "You are an assistant responsible to understand the user's persona and work profile. You will understand the various tasks that the user does such that you can learn from it and replicate those tasks yourselves by calling external functions. Make sure to respond with 'PERSONA_COLLECTED' when you have finished collecting the persona information."
-  INIT_PROMPT: "How does your usual day looks like?"
-  PROBING_PROMPT: 'Based on the above conversation objectify the list of broad tasks that the user said he does.\nSchema- {\n  "type": "object",\n  "properties": {\n    "tasks": {\n      "type": "array",\n      "items": {\n        "type": string\n      }\n    },\n    "required": [\n      "tasks"\n    ]\n  }\n}\nAdhere to the schema and respond with 1 json.\n'
-  PROBING_KEYWORD: 'PERSONA_COLLECTED'
-- name: "assemble_user_tasks"
+collect_persona:
+    SYSTEM_PROMPT: "You are setting up a digital twin profile and need understand the user's persona and work profile. Be less verbose
+    please understand these from user behavior 
+    1 Key: APOLOGIES Description: How does user apologise 
+    2 Key: GREETINGS Description: How does user greets 
+    
+    Need to gather following things using human like conversation from user,
+    1 Key: WORK_TITLE , Description: What is user's title at your company 
+    2 Key: COMPANY , Description: What is user's company 
+    3 Key: ROUTE_TO_HUMAN, Description: How should we route to user from digital twin
+    Till you don't have this info, please continue talking to the user
+    Make sure to respond with '{\"PERSONA_COLLECTED\" : {\"APOLOGIES\" : \"PLACEHOLDER1\" , \"GREETINGS\": \"PLACEHOLDER2\", \"ROUTE_TO_HUMAN\": \"PLACEHOLDER3\", \"WORK_TITLE\":  \"PLACEHOLDER4\",  \"COMPANY\": \"PLACEHOLDER5\"}}'' only when you have finished collecting PLACEHOLDER1, PLACEHOLDER2, PLACEHOLDER3, PLACEHOLDER4, PLACEHOLDER5."
+    INIT_PROMPT: "Hi, we will be setting up your digital twin soon. Can you tell few things about yourself?"
+    PROBING_KEYWORD: "PERSONA_COLLECTED"
+

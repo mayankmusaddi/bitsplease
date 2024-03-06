@@ -2,11 +2,10 @@ import json
 import streamlit as st
 import requests
 import yaml
-
+from utils.db_store import store
 USER = "user"
 ASSISTANT = "assistant"
-SCRIPT_TASK = 0
-SCRIPT_STARTED = {}
+script_stage = "collect_persona"
 SCRIPT_FILE_PATH = 'script.yaml'
 
 
@@ -17,19 +16,16 @@ def get_script_data():
     return script_data
 
 def app():
-    global SCRIPT_TASK, SCRIPT_STARTED
+    global script_stage
     script_data = get_script_data()
     st.title("BitsPleaseBot")
-
-    if script_data[SCRIPT_TASK]['name'] in SCRIPT_STARTED:
-        st.session_state.messages.append({"role": "system",
-                                          "content": script_data[SCRIPT_TASK]['SYSTEM_PROMPT']})
-        st.session_state.messages.append({"role": "assistant",
-                                          "content": script_data[SCRIPT_TASK]['INIT_PROMPT']})
-        SCRIPT_STARTED[script_data[SCRIPT_TASK]['name']] = 1
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
+    st.session_state.messages.append({"role": "system",
+                                          "content": script_data[script_stage]['SYSTEM_PROMPT']})
+    st.session_state.messages.append({"role": "assistant",
+                                          "content": script_data[script_stage]['INIT_PROMPT']})
     for i, message in enumerate(
             st.session_state.messages
     ):  # display all the previous message
@@ -38,7 +34,7 @@ def app():
     user_input = st.chat_input("you")
     if user_input:
         st.chat_message(USER).write(user_input)
-        st.session_state.messages.append({"role": "user", "content": user_input + " Use multiple web_search calls to plan if needed, always share reference, use execute_python_code whenever you can"})
+        st.session_state.messages.append({"role": "user", "content": user_input})
 
         payload = {"messages": st.session_state.messages}
 
@@ -57,14 +53,13 @@ def app():
             bot_answer = json.loads(bot_resp)
         except Exception:
             pass
-        if SCRIPT_TASK == 0 and bot_answer == script_data[SCRIPT_TASK]['PROBING_KEYWORD']:
-            st.session_state.messages.append({"role": "user",
-                                              "content": script_data[SCRIPT_TASK]['PROBING_PROMPT']})
-            SCRIPT_TASK += 1
-            #trigger assemble_user_tasks
-        else:
-            st.chat_message(ASSISTANT).write(bot_answer)
-            st.session_state.messages.append({"role": "assistant", "content": bot_resp})
+        print(bot_answer)
+        if script_stage == "collect_persona" and  script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
+            for key, value in bot_answer[script_data[script_stage]['PROBING_KEYWORD']].items():
+                store.add(key,value)
+            script_stage = "assemble_user_tasks"
+        st.chat_message(ASSISTANT).write(bot_answer)
+        st.session_state.messages.append({"role": "assistant", "content": bot_resp})
 
 
 app()
