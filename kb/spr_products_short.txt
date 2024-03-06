@@ -1,0 +1,95 @@
+[{'Product Name': 'Social Publishing & Engagement',
+  'Short Summary': "Sprinklr's Social Publishing & Engagement platform supports brands in maintaining a consistent digital presence by automating social media interactions, optimizing engagement, and providing rapid, AI-driven responses to customer conversations. It also ensures brand protection through extensive governance rules."},
+
+{'Product Name': 'Unified Care',
+  'Short Summary': "Sprinklr Service is an AI-driven platform that analyses customer conversations across various channels in real-time, identifying intent and sentiment, and routing customers to the right support."},
+
+{'Product Name': 'Social Listening',
+  'Short Summary': "Sprinklr’s Social Listening tool uses AI to analyze millions of conversations across various channels daily, transforming unstructured data into actionable insights. It's designed to protect brand reputation, uncover market trends, and understand customer needs."},
+
+{'Product Name': 'Social Advertising',
+  'Short Summary': "Sprinklr's Social Advertising platform is a unified solution designed to optimize ad spend and enhance campaign performance through AI-powered insights and automation. It streamlines ad creation, improves productivity, and ensures brand reputation control."},
+
+{'Product Name': 'Product Insights',
+  'Short Summary': "Sprinklr's Product Insights uses AI to gather actionable data on customer sentiments towards a brand's products from social channels and review sources, providing real-time insights to increase revenue opportunities."},
+
+{'Product Name': 'Active Data Retention',
+  'Short Summary': "Sprinklr's Active Data Retention allows customers to store platform data for a predetermined length of time to meet operational or regulatory compliance needs. It supports storage periods from 12 to 84 months, ensuring full control and access to critical data."},
+
+{'Product Name': 'Campaign Planning and Content Marketing',
+  'Short Summary': "Sprinklr's Campaign Planning and Content Marketing solution uses AI to maximize content reach, accelerate content production, and enhance content relevance and ROI at scale. It provides a central platform for managing and publishing content across 30+ digital channels."},
+
+{'Product Name': 'Benchmarking',
+  'Short Summary': "Sprinklr’s Benchmarking tools use AI to provide real-time analysis of competitors' performance, providing actionable insights that businesses can use to differentiate themselves in the market."},
+
+{'Product Name': 'Advocacy',
+  'Short Summary': "Sprinklr Advocacy turns employees into brand advocates, leveraging their social connections to extend brand reach and generate new engagement opportunities. It creates an exclusive site for employees with pre-approved content for sharing on their channels."},
+
+{'Product Name': 'Sandbox',
+  'Short Summary': "Sprinklr Sandbox offers a secure, isolated test environment that mirrors the live production environment, allowing businesses to manage modifications to Sprinklr without interrupting daily customer care operations."},
+
+{'Product Name': 'Conversational AI and Bots',
+  'Short Summary': "Sprinklr's Conversational AI and Bots tool provides a conversational interface for customers, offering quick and personalized responses to reduce wait times and enhance customer satisfaction. It can be deployed across 25+ channels and supports over 100 languages."},
+
+{'Product Name': 'Integrations',
+  'Short Summary': "Sprinklr Integrations consolidates data from 30+ modern channels and various platforms like CRM, Digital Asset Management, and Data Visualization tools into a single platform, enhancing collaboration, improving marketing efficiency, and driving stronger customer engagement."},
+
+{'Product Name': 'Self-Service Community',
+  'Short Summary': "Sprinklr's Self-Service Community platform creates a digital forum that enables customer self-service, proactive brand reputation management, and customer-driven innovation. It also fosters customer loyalty and advocacy by enabling meaningful customer interactions."},
+
+{'Product Name': 'Marketing Analytics',
+  'Short Summary': "Sprinklr's Marketing Analytics tool provides a unified platform for measuring and optimizing marketing activities across multiple digital channels. It collects campaign and analytics data, transforming them into actionable insights through a single, AI-powered dashboard."},
+
+{'Product Name': 'Visual Insights',
+  'Short Summary': "Sprinklr's Visual Insights tool uses AI to analyze billions of visuals shared across various channels, transforming them into actionable insights that enhance customer engagement and reduce agent contact volume."},
+
+{'Product Name': 'AI Studio',
+  'Short Summary': 'Sprinklr AI Studio provides a platform for users to create and deploy custom AI text classification models without coding skills. These custom models allow businesses to filter and categorize messages, improving efficiency and accuracy.'},
+
+{'Product Name': 'Display',
+  'Short Summary': "Sprinklr's Display converts content and data into engaging visual experiences across digital signage solutions. It facilitates quick content marketing and displays engaging content on event screens or lobby displays, influencing purchase decisions."},
+
+{'Product Name': 'Media Monitoring & Analytics',
+  'Short Summary': "Sprinklr's Media Monitoring & Analytics provides PR and communications teams with AI-powered, real-time insights to measure, prove the value, and demonstrate the ROI of their marketing efforts. It integrates campaign and analytics data from multiple digital channels into a single dashboard."},
+
+{'Product Name': 'Distributed',
+  'Short Summary': "Sprinklr Distributed helps businesses coordinate marketing and social sales efforts at a distributed level, ensuring consistency and compliance. It simplifies process streamlining, providing remote teams with tools for local editorial calendars, asset management, and pre-optimized suggested campaigns."},
+
+{'Product Name': 'Conversational Analytics',
+  'Short Summary': "Sprinklr's Conversation Analytics tool uses AI, machine learning, and natural language processing (NLP) to analyze customer interactions across various communication channels, turning patterns into actionable insights that enhance customer engagement and satisfaction."},
+
+{'Product Name': 'Sprinklr Service - Advanced Plan (Self-serve offering)',
+  'Short Summary': 'Sprinklr Service Advanced is a self-serve, digital-first, proactive customer service solution.'},
+
+{'Product Name': 'Comment Moderation',
+  'Short Summary': 'Sprinklr’s Comment Moderation and management workflow allows brands to analyze and respond to conversations proactively, trigger timely responses, and eliminate unwanted comments.'},
+
+{'Product Name': 'Social Advanced',
+  'Short Summary': 'Sprinklr Social Advanced is a self-serve social media management platform that helps brands manage their social campaigns on one single platform. It enhances brand visibility and prevents potential crises.'},
+
+{'Product Name': 'Service Command Centre',
+  'Short Summary': "Sprinklr's Service Command Center provides real-time monitoring for potential crises and customer concerns, enabling teams to detect and manage potential issues before they escalate, minimizing damage to the brand."},
+
+{'Product Name': 'AI+ for Service',
+  'Short Summary': 'Sprinklr AI+ for Service empowers customer service teams with AI technologies and tools, boosting agent productivity and enhancing self-service capabilities.'},
+
+{'Product Name': 'Influencer Marketing',
+  'Short Summary': 'Sprinklr’s Influencer Marketing identifies and engages influencers to maximize the reach, authenticity, and impact of marketing messages. This tool helps businesses increase credibility and engagement on social media platforms.'},
+
+{'Product Name': 'Social Care',
+  'Short Summary': 'Sprinklr Social Care helps brands scale their AI-driven social customer service strategy, ensuring a wide channel coverage and empowering agents with AI-powered capabilities.'},
+
+{'Product Name': 'Location Insights',
+  'Short Summary': "Sprinklr's Location Insights tool provides real-time feedback about customers' in-person brand experiences, allowing businesses to get a 360° view of customer feedback at a local, regional, or global level."},
+
+{'Product Name': 'Knowledge Base',
+  'Short Summary': "Sprinklr’s unified Knowledge Base software is designed to provide superior self-help experiences across preferred digital channels, boosting customer satisfaction and reducing agent contact volume."},
+
+{'Product Name': 'Guided Workflow',
+  'Short Summary': 'A Guided Workflow is an automation tool that collects inputs and performs actions as per the pre-defined business flow. It assists customers in a streamlined manner while reducing resolution time.'},
+
+{'Product Name': 'Workforce Management',
+  'Short Summary': "Sprinklr’s Workforce Management system is a solution for optimizing contact center operations, offering features such as forecasting, anomaly detection, staffing, scheduling, reporting, alerts, notifications, and employee leave management to streamline activities efficiently."}
+
+{'Product Name': 'Quality Management',
+  'Short Summary': 'Sprinklr’s Quality Management system uses AI to analyze all customer interactions, both digital and voice, providing quality managers and supervisors with agent quality and compliance scores.'}]
