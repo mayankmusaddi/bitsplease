@@ -10,7 +10,7 @@ available_functions = {
     "web_search": web_search,
     "execute_python_code": execute_python_code,
     "fetch_vertical_specific_products": fetch_vertical_specific_products,
-    "fetch_all_products_description":fetch_all_products_description,
+    "fetch_all_products_description": fetch_all_products_description,
     "fetch_specific_products_description": fetch_specific_product_description,
     "creative_task": creative_task,
     "send_mail": send_mail,

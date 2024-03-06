@@ -22,6 +22,7 @@ col1, col2, col3 = st.columns(3)
 last_content1 = None
 last_content2 = None
 
+
 def convert_json_to_flow_chart(data):
     # Create a new directed graph
     g = gv.Digraph(format='svg')
@@ -50,10 +51,14 @@ def app():
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    st.session_state.messages.append({"role": "system",
-                                          "content": script_data[script_stage]['SYSTEM_PROMPT']})
-    st.session_state.messages.append({"role": "assistant",
-                                          "content": script_data[script_stage]['INIT_PROMPT']})
+    st.session_state.messages.append({
+        "role": "system",
+        "content": script_data[script_stage]['SYSTEM_PROMPT']
+    })
+    st.session_state.messages.append({
+        "role": "assistant",
+        "content": script_data[script_stage]['INIT_PROMPT']
+    })
     for i, message in enumerate(
             st.session_state.messages
     ):  # display all the previous message
@@ -135,4 +140,6 @@ def app():
             # Wait for 2 seconds before checking again
             time.sleep(2)
 
-app()
+
+if __name__ == "__main__":
+    app()
