@@ -13,7 +13,7 @@ COMMAND_CATEGORY_TITLE = "Execute Code"
 logger = logging.getLogger(__name__)
 
 
-def execute_python_code(code: str) -> str:
+async def execute_python_code(code: str) -> str:
     """
     Create and execute a Python file in a Docker container and return the STDOUT of the
     executed code.
@@ -35,14 +35,17 @@ def execute_python_code(code: str) -> str:
     tmp_code_file.flush()
 
     try:
-        return execute_python_file(tmp_code_file.name)  # type: ignore
+        return await execute_python_file(tmp_code_file.name)  # type: ignore
     except Exception as e:
         raise Exception(*e.args)
     finally:
         tmp_code_file.close()
 
 
-def execute_python_file(
+import asyncio
+import shlex
+
+async def execute_python_file(
         filename: Path, args: list[str] | str = []
 ) -> str:
     """Execute a Python file in a Docker container and return the output
@@ -63,23 +66,26 @@ def execute_python_file(
     )
 
     if isinstance(args, str):
-        args = args.split()  # Convert space-separated string to a list
+        args = shlex.split(args)  # Convert space-separated string to a list
 
     if not str(filename).endswith(".py"):
         raise InvalidArgumentError("Invalid file type. Only .py files are allowed.")
 
-    result = subprocess.run(
-        ["python", "-B", str(filename)] + args,
-        capture_output=True,
-        encoding="utf8",
+    process = await asyncio.create_subprocess_exec(
+        "python", "-B", str(filename), *args,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
         # cwd=str(agent.workspace.root),
     )
-    if result.returncode == 0:
-        return result.stdout
+
+    stdout, stderr = await process.communicate()
+
+    if process.returncode == 0:
+        output = stdout.decode()
+        print(output)
+        return output
     else:
-        raise Exception(result.stderr)
-
-
+        raise Exception(stderr.decode())
 def ensure_compilable(code):
     try:
         compile(code, '<string>', 'exec')

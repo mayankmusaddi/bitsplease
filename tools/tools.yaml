@@ -9,7 +9,7 @@
       required:
         - query
 - name: execute_python_code
-  description: execute python code
+  description: execute python code, has to be compilable only python code, always write print in the end to get the output
   schema:
     type: object
     properties:

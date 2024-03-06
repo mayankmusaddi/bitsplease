@@ -13,7 +13,7 @@ COMMAND_CATEGORY_TITLE = "Web Search"
 DUCKDUCKGO_MAX_ATTEMPTS = 3
 
 
-async def web_search(query: str, num_results: int = 5) -> str:
+async def web_search(query: str, num_results: int = 1) -> str:
     """Return the results of a Google search
 
     Args:

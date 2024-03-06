@@ -20,7 +20,7 @@ def app():
     user_input = st.chat_input("you")
     if user_input:
         st.chat_message(USER).write(user_input)
-        st.session_state.messages.append({"role": "user", "content": user_input + " Use multiple web_search calls to plan if needed, always share reference"})
+        st.session_state.messages.append({"role": "user", "content": user_input + " Use multiple web_search calls to plan if needed, always share reference, use execute_python_code whenever you can, ensure units are respected or write another function to change units "})
 
         payload = {"messages": st.session_state.messages}
 
