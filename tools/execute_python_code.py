@@ -45,8 +45,9 @@ async def execute_python_code(code: str) -> str:
 import asyncio
 import shlex
 
+
 async def execute_python_file(
-        filename: Path, args: list[str] | str = []
+        filename: Path, args=[]
 ) -> str:
     """Execute a Python file in a Docker container and return the output
 
@@ -86,6 +87,8 @@ async def execute_python_file(
         return output
     else:
         raise Exception(stderr.decode())
+
+
 def ensure_compilable(code):
     try:
         compile(code, '<string>', 'exec')

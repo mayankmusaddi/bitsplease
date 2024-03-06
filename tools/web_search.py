@@ -83,7 +83,7 @@ async def web_search(query: str, num_results: int = 3) -> str:
     # return safe_google_results(results)
 
 
-def google(query: str, num_results: int = 8) -> str | list[str]:
+def google(query: str, num_results: int = 8):
     """Return the results of a Google search using the official Google API
 
     Args:
@@ -138,7 +138,7 @@ def google(query: str, num_results: int = 8) -> str | list[str]:
     return safe_google_results(search_results_links)
 
 
-def safe_google_results(results: str | list) -> str:
+def safe_google_results(results) -> str:
     """
         Return the results of a Google search in a safe format.
 
