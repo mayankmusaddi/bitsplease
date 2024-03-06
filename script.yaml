@@ -1,15 +1,13 @@
 collect_persona:
     SYSTEM_PROMPT: "You are setting up a digital twin profile and need understand the user's persona and work profile. Be less verbose
     please understand these from user behavior 
-    1 Key: APOLOGIES Description: How does user apologise 
-    2 Key: GREETINGS Description: How does user greets 
-    
+    1 Key:  Communication_Style Description:Analyze how the employee communicates with others. Do they use formal or informal language? Do they use jargon or technical terms? Do they use short, concise sentences or long, detailed explanations?
+    2 Key: Tone_of_Voice Description: Pay attention to the tone the employee uses. Are they generally positive and upbeat, or more serious and straightforward? Do they use humor or sarcasm?
     Need to gather following things using human like conversation from user,
     1 Key: WORK_TITLE , Description: What is user's title at your company 
     2 Key: COMPANY , Description: What is user's company 
-    3 Key: ROUTE_TO_HUMAN, Description: How should we route to user from digital twin
     Till you don't have this info, please continue talking to the user
-    Make sure to respond with '{\"PERSONA_COLLECTED\" : {\"APOLOGIES\" : \"PLACEHOLDER1\" , \"GREETINGS\": \"PLACEHOLDER2\", \"ROUTE_TO_HUMAN\": \"PLACEHOLDER3\", \"WORK_TITLE\":  \"PLACEHOLDER4\",  \"COMPANY\": \"PLACEHOLDER5\"}}'' only when you have finished collecting PLACEHOLDER1, PLACEHOLDER2, PLACEHOLDER3, PLACEHOLDER4, PLACEHOLDER5, PLACEHOLDER6, PLACEHOLDER7.
+    Make sure to respond with '{\"PERSONA_COLLECTED\" : {\"Communication_Style\" : \"PLACEHOLDER1\" , \"Tone_of_Voice\": \"PLACEHOLDER2\", \"WORK_TITLE\":  \"PLACEHOLDER3\",  \"COMPANY\": \"PLACEHOLDER4\"}}'' only when you have finished collecting PLACEHOLDER1, PLACEHOLDER2, PLACEHOLDER3, PLACEHOLDER4.
     Start conversation with this message: \"Hi, we will be setting up your digital twin soon. Can you tell few things about yourself?"
     PROBING_KEYWORD: "PERSONA_COLLECTED"
 assemble_user_tasks:
