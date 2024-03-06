@@ -4,9 +4,13 @@ async def fetch_vertical_specific_products(vertical: str):
     """
     import aiofiles
     import ast
+    import os
     from utils.openai_utils import openai_call
-    async with aiofiles.open('../kb/vertical_product_map.txt', mode='r') as file:
-        contents = file.read()
+
+    current_dir = os.getcwd()
+    file_path = os.path.join(current_dir, '../kb/vertical_product_map.txt')
+    async with aiofiles.open(file_path, mode='r') as file:
+        contents = await file.read()
     mapping = ast.literal_eval(str(contents))
     
     system_prompt = ("You are an expert in understanding large data and how to answer queries based on it. You help in understanding which CRM/CXM products can be pitched to clients.")
