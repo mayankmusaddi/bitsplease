@@ -50,10 +50,7 @@ def app():
 
     if "script_stage" not in st.session_state:
         st.session_state.script_stage = "collect_persona"
-
     script_stage = st.session_state.script_stage
-    st.session_state.messages.append({"role": "system",
-                                      "content": script_data[script_stage]['SYSTEM_PROMPT']})
     # st.session_state.messages.append({"role": "assistant",
     #                                   "content": script_data[script_stage]['INIT_PROMPT']})
     for i, message in enumerate(
@@ -65,8 +62,11 @@ def app():
     if user_input:
         st.chat_message(USER).write(user_input)
         st.session_state.messages.append({"role": "user", "content": user_input})
+        messages = st.session_state.messages.copy()
 
-        payload = {"messages": st.session_state.messages}
+        messages.append({"role": "system",
+                                          "content": script_data[script_stage]['SYSTEM_PROMPT']})
+        payload = {"messages": messages}
 
         with st.spinner("Running"):
             print("REQ: ", payload)
