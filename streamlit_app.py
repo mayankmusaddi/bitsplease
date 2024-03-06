@@ -1,7 +1,7 @@
 import streamlit as st
-import time
 import json
 import requests
+import time
 import yaml
 import graphviz as gv
 
@@ -14,25 +14,27 @@ SCRIPT_FILE_PATH = 'script.yaml'
 # Set layout to wide
 st.set_page_config(layout="wide")
 
-
 # Divide the page into 3 columns
-# col1, st, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3)
+
+# Store the last read content of the files
+last_content1 = None
+last_content2 = None
+
 
 def convert_json_to_flow_chart(data):
     # Create a new directed graph
     g = gv.Digraph(format='svg')
 
     # Add nodes to the graph
-    for i, line in enumerate(data):
-        g.node(str(i), line)
+    for node in data['task_nodes']:
+        g.node(node['task_id'], node['task'])
 
     # Add edges to the graph
-    for i in range(len(data) - 1):
-        g.edge(str(i), str(i + 1))
+    for link in data['task_links']:
+        g.edge(link['source'], link['target'])
 
-    # Return the graph
     return g
-
 
 def get_script_data():
     global SCRIPT_FILE_PATH
@@ -40,10 +42,10 @@ def get_script_data():
         script_data = yaml.safe_load(yaml_file)  # Load YAML data
     return script_data
 
-
 def app():
+    global script_stage, last_content1, last_content2
     script_data = get_script_data()
-    st.title("BitsPleaseBot")
+    col2.title("BitsPleaseBot")
     print(st.session_state)
     if "messages" not in st.session_state:
         st.session_state.messages = []
@@ -56,11 +58,11 @@ def app():
     for i, message in enumerate(
             st.session_state.messages
     ):  # display all the previous message
-        st.chat_message(message["role"]).write(message["content"])
+        col2.chat_message(message["role"]).write(message["content"])
 
-    user_input = st.chat_input("you")
+    user_input = col2.chat_input("you")
     if user_input:
-        st.chat_message(USER).write(user_input)
+        col2.chat_message(USER).write(user_input)
         st.session_state.messages.append({"role": "user", "content": user_input})
         messages = st.session_state.messages.copy()
 
@@ -99,28 +101,45 @@ def app():
                 except Exception as e:
                     store.add(key, value)
             st.session_state.script_stage = "finished"
-        st.chat_message(ASSISTANT).write(bot_answer)
+        col2.chat_message(ASSISTANT).write(bot_answer)
         st.session_state.messages.append({"role": "assistant", "content": bot_resp})
-    #
-    # # Update and display JSON content in the left and right columns every k seconds
-    # while True:
-    #     # Get JSON data from your local files
-    #     with open('db_file.json') as f1, open('dag.json') as f2:
-    #         data1 = json.load(f1)
-    #         data2 = json.load(f2)
-    #
-    #     # Display data in the left column
-    #     col1.title("Persona details")
-    #     col1.json(data1)
-    #
-    #     # Display data in the right column as a flow chart
-    #     col3.title("Flow Chart")
-    #     # Convert your JSON data to a flow chart
-    #     flow_chart = convert_json_to_flow_chart(data2)
-    #     col3.write(flow_chart)
-    #
-    #     # Wait for 2 seconds before updating
-    #     time.sleep(2)
+
+        # Update and display JSON content in the left and right columns every k seconds
+        while True:
+            # Get the current content of the files
+            with open('db_file.json') as f1, open('dag.json') as f2:
+                current_content1 = f1.read()
+                current_content2 = f2.read()
+
+            # If the content of the first file has changed since the last time it was read, update the data
+            if last_content1 != current_content1:
+                # Parse the JSON data
+                data1 = json.loads(current_content1)
+
+                # Display data in the left column
+                col1.title("Persona details")
+                col1.json(data1)
+
+                # Update the last read content
+                last_content1 = current_content1
+
+            # If the content of the second file has changed since the last time it was read, update the data
+            if last_content2 != current_content2:
+                # Parse the JSON data
+                data2 = json.loads(current_content2)
+
+                # Display data in the right column as a flow chart
+                col3.title("Flow Chart")
+                # Convert your JSON data to a flow chart
+                flow_chart = convert_json_to_flow_chart(data2)
+                col3.graphviz_chart(flow_chart)
+
+                # Update the last read content
+                last_content2 = current_content2
+
+            # Wait for 2 seconds before checking again
+            time.sleep(2)
 
 
-app()
+if __name__ == "__main__":
+    app()

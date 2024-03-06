@@ -3,7 +3,6 @@ import json
 import logging
 from jsonschema import validate, ValidationError
 import time
-from tools import available_functions
 
 
 async def openai_call(
@@ -101,6 +100,7 @@ async def get_openai_output(
             del response_message["function_call"]
         messages.append(response_message)
         if "tool_calls" in response_message and response_message["tool_calls"]:
+            from tools import available_functions
             tool_calls = response_message["tool_calls"]
             for tool_call in tool_calls:
                 function_name = tool_call["function"]["name"]
