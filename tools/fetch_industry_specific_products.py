@@ -4,6 +4,7 @@ async def fetch_industry_specific_products(vertical: str):
     """
     import aiofiles
     import ast
+    from utils.openai_utils import openai_call
     async with aiofiles.open('../kb/vertical_product_map.txt', mode='r') as file:
         contents = file.read()
     mapping = ast.literal_eval(str(contents))
