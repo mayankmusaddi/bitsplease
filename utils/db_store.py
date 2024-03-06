@@ -9,13 +9,13 @@ class StoreDB:
         else:
             self.db = {}
 
-    def create(self, key, value):
+    def add(self, key, value):
         if key in self.db:
             raise Exception('Key already exists')
         self.db[key] = value
         self._persist()
 
-    def read(self, key):
+    def fetch(self, key):
         try:
             return self.db[key]
         except KeyError:
