@@ -1,5 +1,5 @@
 """Commands to search the web with"""
-
+import asyncio
 import json
 import os
 import time
@@ -13,7 +13,7 @@ COMMAND_CATEGORY_TITLE = "Web Search"
 DUCKDUCKGO_MAX_ATTEMPTS = 3
 
 
-async def web_search(query: str, num_results: int = 8) -> str:
+async def web_search(query: str, num_results: int = 5) -> str:
     """Return the results of a Google search
 
     Args:
@@ -39,15 +39,34 @@ async def web_search(query: str, num_results: int = 8) -> str:
         time.sleep(1)
         attempts += 1
     print(search_results)
-    search_results = [
-        {
-            "title": r["title"].encode("utf-8", "ignore").decode("utf-8"),
-            "url": r["href"].encode("utf-8", "ignore").decode("utf-8"),
-            "data": await web_scraper(r["href"].encode("utf-8", "ignore").decode("utf-8")),
-            **({"exerpt": r["body"].encode("utf-8", "ignore").decode("utf-8")} if r.get("body") else {}),
-        }
-        for r in search_results
-    ]
+    import asyncio
+
+    async def get_search_results(search_results):
+        tasks = []
+        for r in search_results:
+            title = r["title"].encode("utf-8", "ignore").decode("utf-8")
+            url = r["href"].encode("utf-8", "ignore").decode("utf-8")
+            task = asyncio.create_task(web_scraper(url))
+            tasks.append((title, url, task, r.get("body")))
+        return tasks
+
+    async def process_results(tasks):
+        search_results = []
+        for title, url, task, body in tasks:
+            data = await task
+            result = {
+                "title": title,
+                "url": url,
+                "data": data,
+            }
+            if body:
+                result["exerpt"] = body.encode("utf-8", "ignore").decode("utf-8")
+            search_results.append(result)
+        return search_results
+
+    # usage
+    tasks = await get_search_results(search_results)
+    search_results = await process_results(tasks)
     return  search_results
     # results = (
     #               "## Search results\n"

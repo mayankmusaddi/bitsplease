@@ -5,8 +5,9 @@ from jsonschema import validate, ValidationError
 import time
 from tools import available_functions
 
+
 async def openai_call(
-    system_prompt, messages=[], schema=None, response_format={"type": "text"}, tools=[], max_attempts=3
+        system_prompt, messages=[], schema=None, response_format={"type": "text"}, tools=[], max_attempts=3
 ):
     start = time.time()
 
@@ -85,7 +86,7 @@ def llm_router_call(messages, response_format, tools=[]):
 
 
 async def get_openai_output(
-    system_prompt, messages, response_format={"type": "text"}, tools=[]
+        system_prompt, messages, response_format={"type": "text"}, tools=[]
 ):
     try:
         system_message = {"role": "system", "content": system_prompt}
@@ -105,7 +106,6 @@ async def get_openai_output(
                 print("Calling function:", function_name, function_args)
                 function_to_call = available_functions[function_name]
                 function_response = await function_to_call(**function_args)
-
 
                 messages.append(
                     {

@@ -33,6 +33,8 @@ async def web_scraper(url: str) -> dict:
             # Close the PDF
             pdf.close()
             # Return the text
+            print(text)
+
             return {'pdf': text}
 
         # Launch the browser

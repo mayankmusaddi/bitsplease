@@ -21,7 +21,8 @@ class BaseHandler(tornado.web.RequestHandler):
         return response
 
     async def process(self, payload):
-        system_prompt = "You are a helpful assistant"
+        system_prompt = ("You are a helpful assistant."
+                         "Share references whenever using external tools, use web_search as much as possible ")
         messages = payload["messages"]
         with open('tools/tools.yaml', 'r') as yaml_file:
             yaml_data = yaml.safe_load(yaml_file)  # Load YAML data
