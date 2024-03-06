@@ -16,6 +16,7 @@ async def web_scraper(url: str) -> dict:
         import asyncio
         from pyppeteer import launch
         from bs4 import BeautifulSoup
+        from .summarize import summarize
 
         import requests
         import pdfplumber
@@ -33,6 +34,7 @@ async def web_scraper(url: str) -> dict:
             # Close the PDF
             pdf.close()
             # Return the text
+            text = await summarize(str(text))
             print(text)
 
             return {'pdf': text}
@@ -70,6 +72,7 @@ async def web_scraper(url: str) -> dict:
                         scraped_data[tag_name].append(tag.text.strip())
                     else:
                         scraped_data[tag_name] = [tag.text.strip()]
+        # scraped_data = await summarize(str(scraped_data))
         print(scraped_data)
         return scraped_data
     except Exception as e:

@@ -7,9 +7,9 @@ async def fetch_specific_product_description(product: str):
     import os
     from utils.openai_utils import openai_call
 
-    current_dir = os.getcwd()
-    file_path = os.path.join(current_dir, '../kb/spr_products_long.txt')
-    async with aiofiles.open(file_path, mode='r') as file:
+    # current_dir = os.getcwd()
+    # file_path = os.path.join(current_dir, '/kb/spr_products_long.txt')
+    async with aiofiles.open("./tools/spr_products_long.txt", mode='r') as file:
         contents = await file.read()
     mapping = ast.literal_eval(str(contents))
     
