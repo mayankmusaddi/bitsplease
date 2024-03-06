@@ -1,4 +1,18 @@
 class StoreDB:
+    """
+    A simple key-value store that persists data to a JSON file.
+
+    This class provides methods to add, fetch, update, and delete key-value pairs.
+    The data is stored in a dictionary and persisted to a JSON file after each operation.
+    If the JSON file does not exist, it is created upon initialization.
+    If the JSON file exists, it is loaded upon initialization.
+
+    Methods:
+        add(key, value): Adds a new key-value pair to the store.
+        fetch(key): Fetches the value associated with a key from the store.
+        update(key, value): Updates the value associated with a key in the store.
+        delete(key): Deletes a key-value pair from the store.
+    """
     def __init__(self, db_file = './db_file.json'):
         import json
         import os
@@ -36,3 +50,19 @@ class StoreDB:
     def _persist(self):
         with open(self.db_file, 'w') as f:
             json.dump(self.db, f)
+
+
+"""
+Usage:
+store = StoreDB()
+store.add('key1', 'value1')
+store.add('key2', 'value2')
+store.add('key3', 'value3')
+print(store.fetch('key1'))  # Outputs: value1
+# Update a value
+store.update('key1', 'updatedValue1')
+# Fetch and print the updated value
+print(store.fetch('key1'))  # Outputs: updatedValue1
+# Delete a key-value pair
+store.delete('key1')
+"""
