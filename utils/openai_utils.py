@@ -67,7 +67,7 @@ def llm_router_call(messages, response_format, tools=[]):
     headers = {'Content-Type': 'application/json'}
     payload = {
         "client_identifier": "aih_9",
-        "model": "gpt-4-turbo-preview",
+        "model": "gpt-3.5-turbo-1106",
         "messages": messages,
         "tools": tools,
         "tool_choice": "auto",
@@ -88,11 +88,13 @@ async def get_openai_output(
 ):
     try:
         system_message = {"role": "system", "content": system_prompt}
-        messages = [system_message] + messages
+        if messages[0]["role"] != "system":
+            messages = [system_message] + messages
         response = llm_router_call(messages, response_format, tools)
-        print("LLM RESPONSE: ", response)
 
         response_message = response["choices"][0]["message"]
+        if "function_call" in response_message and not response_message["function_call"]:
+            del response_message["function_call"]
         messages.append(response_message)
         if "tool_calls" in response_message and response_message["tool_calls"]:
             tool_calls = response_message["tool_calls"]
@@ -108,12 +110,13 @@ async def get_openai_output(
 
                 print("Calling function:", function_name, function_args)
                 function_response = {"response": "shahrukh khan is a popular bollywood actor"}
+
                 messages.append(
                     {
                         "tool_call_id": tool_call["id"],
                         "role": "tool",
                         "name": function_name,
-                        "content": function_response,
+                        "content": str(function_response),
                     }
                 )  # extend conversation with function response
             return await get_openai_output(system_prompt, messages, response_format=response_format, tools=tools)
