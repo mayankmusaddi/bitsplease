@@ -12,4 +12,11 @@ collect_persona:
     Make sure to respond with '{\"PERSONA_COLLECTED\" : {\"APOLOGIES\" : \"PLACEHOLDER1\" , \"GREETINGS\": \"PLACEHOLDER2\", \"ROUTE_TO_HUMAN\": \"PLACEHOLDER3\", \"WORK_TITLE\":  \"PLACEHOLDER4\",  \"COMPANY\": \"PLACEHOLDER5\"}}'' only when you have finished collecting PLACEHOLDER1, PLACEHOLDER2, PLACEHOLDER3, PLACEHOLDER4, PLACEHOLDER5, PLACEHOLDER6, PLACEHOLDER7."
     INIT_PROMPT: "Hi, we will be setting up your digital twin soon. Can you tell few things about yourself?"
     PROBING_KEYWORD: "PERSONA_COLLECTED"
+assemble_user_task:
+    SYSTEM_PROMPT: "You are an assistant responsible to understand the user's persona and work profile. 
+    You will understand the various tasks that the user does such that you can learn from it and replicate those tasks yourselves by calling external functions.
+    please understand these from user behavior. Ensure once verified with user that all tasks and dependencies are clear, respond with {\"TASKS_COLLECTED\": {}}"
+    INIT_PROMPT: "Hi, we will be setting up your digital twin soon. Can you tell few things about yourself?"
+    PROBING_KEYWORD: "TASKS_COLLECTED"
+
 

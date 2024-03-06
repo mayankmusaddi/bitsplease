@@ -86,6 +86,13 @@ def app():
                 except Exception as e:
                     store.add(key, value)
             script_stage = "assemble_user_tasks"
+        if script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
+            for key, value in bot_answer[script_data[script_stage]['PROBING_KEYWORD']].items():
+                try:
+                    store.fetch(key)
+                except Exception as e:
+                    store.add(key, value)
+            script_stage = "finished"
         st.chat_message(ASSISTANT).write(bot_answer)
         st.session_state.messages.append({"role": "assistant", "content": bot_resp})
 
