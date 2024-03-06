@@ -69,10 +69,12 @@ def llm_router_call(messages, response_format, tools=[]):
     payload = {
         "client_identifier": "aih_9",
         "model": "gpt-4-turbo-preview",
-        "messages": messages,
-        "tools": tools,
-        "tool_choice": "auto",
+        "messages": messages
     }
+    if tools:
+        payload["tools"] = tools
+        payload["tool_choice"] = "auto"
+
     url = "https://prod0-intuitionx-llm-router.sprinklr.com/chat-completion"
     response = requests.post(url, headers=headers, data=json.dumps(payload))
 
