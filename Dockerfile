@@ -2,6 +2,7 @@ FROM python:latest
 
 RUN mkdir -p /bitsplease
 COPY ./requirements.txt /bitsplease/requirements.txt
+COPY ./tools/function_requirements.txt /bitsplease/tools/function_requirements.txt
 
 RUN python3 -m pip install -r /bitsplease/requirements.txt --no-cache-dir --default-timeout=1000 && pip cache purge
 RUN python3 -m pip install -r /bitsplease/tools/function_requirements.txt --no-cache-dir --default-timeout=1000 && pip cache purge
