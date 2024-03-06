@@ -28,3 +28,28 @@
         description: the URL to scrape data from
       required:
         - url
+- name: fetch_all_products_description
+  description: Fetch few-line description of all products offered by Sprinklr.
+  schema:
+    type: object
+    properties: {}
+- name: fetch_specific_product_description
+  description: Fetch detailed description of a specific Sprinklr product.
+  schema:
+    type: object
+    properties:
+      product:
+        type: string
+        description: the product name
+    required:
+      - product
+- name: fetch_vertical_specific_products
+  description: Fetch all of Sprinklr's products that can be pitched to a company under the specified vertical.
+  schema:
+    type: object
+    properties:
+      vertical:
+        type: string
+        description: the vertical industry
+    required:
+      - vertical
