@@ -4,7 +4,11 @@ async def fetch_all_products_description():
     """
     import aiofiles
     import ast
-    async with aiofiles.open('../kb/spr_products_short.txt', mode='r') as file:
+    import os
+    
+    current_dir = os.getcwd()
+    file_path = os.path.join(current_dir, '../kb/spr_products_short.txt')
+    async with aiofiles.open(file_path, mode='r') as file:
         contents = file.read()
 
     return ast.literal_eval(str(contents))
