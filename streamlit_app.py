@@ -3,6 +3,7 @@ import streamlit as st
 import requests
 import yaml
 from utils.db_store import store
+
 USER = "user"
 ASSISTANT = "assistant"
 script_stage = "collect_persona"
@@ -15,6 +16,7 @@ def get_script_data():
         script_data = yaml.safe_load(yaml_file)  # Load YAML data
     return script_data
 
+
 def app():
     global script_stage
     script_data = get_script_data()
@@ -23,9 +25,9 @@ def app():
         st.session_state.messages = []
 
     st.session_state.messages.append({"role": "system",
-                                          "content": script_data[script_stage]['SYSTEM_PROMPT']})
+                                      "content": script_data[script_stage]['SYSTEM_PROMPT']})
     st.session_state.messages.append({"role": "assistant",
-                                          "content": script_data[script_stage]['INIT_PROMPT']})
+                                      "content": script_data[script_stage]['INIT_PROMPT']})
     for i, message in enumerate(
             st.session_state.messages
     ):  # display all the previous message
@@ -54,9 +56,12 @@ def app():
         except Exception:
             pass
         print(bot_answer)
-        if script_stage == "collect_persona" and  script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
+        if script_stage == "collect_persona" and script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
             for key, value in bot_answer[script_data[script_stage]['PROBING_KEYWORD']].items():
-                store.add(key,value)
+                try:
+                    store.fetch(key)
+                except Exception as e:
+                    store.add(key, value)
             script_stage = "assemble_user_tasks"
         st.chat_message(ASSISTANT).write(bot_answer)
         st.session_state.messages.append({"role": "assistant", "content": bot_resp})

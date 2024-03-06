@@ -9,7 +9,7 @@ collect_persona:
     2 Key: COMPANY , Description: What is user's company 
     3 Key: ROUTE_TO_HUMAN, Description: How should we route to user from digital twin
     Till you don't have this info, please continue talking to the user
-    Make sure to respond with '{\"PERSONA_COLLECTED\" : {\"APOLOGIES\" : \"PLACEHOLDER1\" , \"GREETINGS\": \"PLACEHOLDER2\", \"ROUTE_TO_HUMAN\": \"PLACEHOLDER3\", \"WORK_TITLE\":  \"PLACEHOLDER4\",  \"COMPANY\": \"PLACEHOLDER5\"}}'' only when you have finished collecting PLACEHOLDER1, PLACEHOLDER2, PLACEHOLDER3, PLACEHOLDER4, PLACEHOLDER5."
+    Make sure to respond with '{\"PERSONA_COLLECTED\" : {\"APOLOGIES\" : \"PLACEHOLDER1\" , \"GREETINGS\": \"PLACEHOLDER2\", \"ROUTE_TO_HUMAN\": \"PLACEHOLDER3\", \"WORK_TITLE\":  \"PLACEHOLDER4\",  \"COMPANY\": \"PLACEHOLDER5\"}}'' only when you have finished collecting PLACEHOLDER1, PLACEHOLDER2, PLACEHOLDER3, PLACEHOLDER4, PLACEHOLDER5, PLACEHOLDER6, PLACEHOLDER7."
     INIT_PROMPT: "Hi, we will be setting up your digital twin soon. Can you tell few things about yourself?"
     PROBING_KEYWORD: "PERSONA_COLLECTED"
 
