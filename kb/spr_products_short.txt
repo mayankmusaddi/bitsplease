@@ -89,7 +89,7 @@
   'Short Summary': 'A Guided Workflow is an automation tool that collects inputs and performs actions as per the pre-defined business flow. It assists customers in a streamlined manner while reducing resolution time.'},
 
 {'Product Name': 'Workforce Management',
-  'Short Summary': "Sprinklr’s Workforce Management system is a solution for optimizing contact center operations, offering features such as forecasting, anomaly detection, staffing, scheduling, reporting, alerts, notifications, and employee leave management to streamline activities efficiently."}
+  'Short Summary': "Sprinklr’s Workforce Management system is a solution for optimizing contact center operations, offering features such as forecasting, anomaly detection, staffing, scheduling, reporting, alerts, notifications, and employee leave management to streamline activities efficiently."},
 
 {'Product Name': 'Quality Management',
   'Short Summary': 'Sprinklr’s Quality Management system uses AI to analyze all customer interactions, both digital and voice, providing quality managers and supervisors with agent quality and compliance scores.'}]
