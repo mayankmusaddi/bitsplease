@@ -19,8 +19,11 @@ class StoreDB:
         import os
         self.db_file = db_file
         if os.path.exists(db_file):
-            with open(db_file, 'r') as f:
-                self.db = json.load(f)
+            try:
+                with open(db_file, 'r') as f:
+                    self.db = json.load(f)
+            except json.JSONDecodeError:
+                self.db = {}
         else:
             self.db = {}
 
