@@ -1,0 +1,6 @@
+- name: "collect_persona"
+  SYSTEM_PROMPT: "You are an assistant responsible to understand the user's persona and work profile. You will understand the various tasks that the user does such that you can learn from it and replicate those tasks yourselves by calling external functions. Make sure to respond with 'PERSONA_COLLECTED' when you have finished collecting the persona information."
+  INIT_PROMPT: "How does your usual day looks like?"
+  PROBING_PROMPT: 'Based on the above conversation objectify the list of broad tasks that the user said he does.\nSchema- {\n  "type": "object",\n  "properties": {\n    "tasks": {\n      "type": "array",\n      "items": {\n        "type": string\n      }\n    },\n    "required": [\n      "tasks"\n    ]\n  }\n}\nAdhere to the schema and respond with 1 json.\n'
+  PROBING_KEYWORD: 'PERSONA_COLLECTED'
+- name: "assemble_user_tasks"
