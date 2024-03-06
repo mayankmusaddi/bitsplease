@@ -54,8 +54,8 @@ def app():
     script_stage = st.session_state.script_stage
     st.session_state.messages.append({"role": "system",
                                       "content": script_data[script_stage]['SYSTEM_PROMPT']})
-    st.session_state.messages.append({"role": "assistant",
-                                      "content": script_data[script_stage]['INIT_PROMPT']})
+    # st.session_state.messages.append({"role": "assistant",
+    #                                   "content": script_data[script_stage]['INIT_PROMPT']})
     for i, message in enumerate(
             st.session_state.messages
     ):  # display all the previous message
