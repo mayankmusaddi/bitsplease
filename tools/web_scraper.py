@@ -23,6 +23,7 @@ async def web_scraper(url: str) -> dict:
 
         # Check if the URL is a PDF
         if url.endswith('.pdf') or url.endswith('.pdf/'):
+            print("Reading PDF..")
             # Download the PDF
             response = requests.get(url)
             # Open the PDF
