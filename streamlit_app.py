@@ -15,8 +15,6 @@ ASSISTANT = "assistant"
 
 # Set layout to wide
 st.set_page_config(layout="wide")
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
 
 # Divide the page into 3 columns
 col1, col2, col3 = st.columns(3)
