@@ -8,7 +8,7 @@ import streamlit as st
 
 from utils.db_store import store, dag_store
 from tools.generate_dag import generate_dag
-
+from tools.generate_persona import generate_persona
 SYSTEM = "system"
 USER = "user"
 ASSISTANT = "assistant"
@@ -86,6 +86,7 @@ def update_cols():
 
     # Wait for 2 seconds before checking again
     time.sleep(5)
+    print("+++++++ DEBUG +++++++++")
     st.experimental_rerun()
 
 
@@ -95,6 +96,8 @@ def on_user_input():
     script_data = st.session_state.script_data
 
     # col2.chat_message(USER).write(user_input)
+    # if len([message for message in st.session_state.messages if message['role'] == ASSISTANT]) == 0:
+    #     st.session_state.messages.append({"role": ASSISTANT, "content": script_data[script_stage]['INIT_PROMPT']})
     st.session_state.messages.append({"role": USER, "content": user_input})
     messages = st.session_state.messages.copy()
 
@@ -115,8 +118,10 @@ def on_user_input():
         bot_answer = json.loads(bot_resp)
     except Exception:
         pass
-    if script_stage == "collect_persona" and script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
-        for key, value in bot_answer[script_data[script_stage]['PROBING_KEYWORD']].items():
+    if script_stage == "collect_persona" and script_data[script_stage]['PROBING_KEYWORD'] == bot_answer:
+        persona = asyncio.run(generate_persona(st.session_state.messages))
+        print(persona)
+        for key, value in persona.items():
             try:
                 store.fetch(key)
                 store.update(key, value)
@@ -167,7 +172,8 @@ def app():
     col1.title("Persona details")
     if "current_content1" in st.session_state:
         col1.json(st.session_state.current_content1)
-
+    if len([message for message in st.session_state.messages if message['role'] == ASSISTANT]) == 0:
+        st.session_state.messages.append({"role": ASSISTANT, "content": st.session_state.script_data[st.session_state.script_stage]['INIT_PROMPT']})
     for i, message in enumerate(st.session_state.messages):  # display all the previous message
         col2.chat_message(message["role"]).write(message["content"])
     col2.chat_input("Enter a user message here.", key="user_input", on_submit=on_user_input)

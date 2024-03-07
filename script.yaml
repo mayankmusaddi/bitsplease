@@ -9,8 +9,8 @@ collect_persona:
     3 Key: NAME , Description: What is user's name 
 
     Till you don't have this info, please continue talking to the user. Avoid repeating yourself and ask one thing at a time ensuring brevity.
-    Make sure to respond with '{\"PERSONA_COLLECTED\" : {\"Communication_Style\" : \"PLACEHOLDER1\" , \"Tone_of_Voice\": \"PLACEHOLDER2\", \"WORK_TITLE\":  \"PLACEHOLDER3\",  \"COMPANY\": \"PLACEHOLDER4\",  \"NAME\": \"PLACEHOLDER5\"}}'' only when you have finished collecting PLACEHOLDER1, PLACEHOLDER2, PLACEHOLDER3, PLACEHOLDER4, PLACEHOLDER5.
-    Start conversation with this message: \"Hi, we will be setting up your digital twin soon. Can you tell few things about yourself?"
+    Make sure to respond with \"PERSONA_COLLECTED\" once you think we can extract every needed keys information from chat"
+    INIT_PROMPT: "Hi, we will be setting up your digital twin soon. Can you tell few things about yourself? "
     PROBING_KEYWORD: "PERSONA_COLLECTED"
 assemble_user_tasks:
     SYSTEM_PROMPT: "You are an assistant responsible to understand the user's work profile and tasks. 
@@ -24,5 +24,5 @@ assemble_user_tasks:
     You will continue having a conversation with the user until the user gives a confirmation that it is satisfied that you have understood the task.
     Respond with TASKS_COLLECTED when done. 
     Avoid repeating yourself and ask one thing at a time ensuring brevity."
-    INIT_PROMPT: "Hi, we will be setting up your digital twin soon. Can you tell few things about yourself?"
+    INIT_PROMPT: "Hi, your persona is all set. We are getting closer to set up your digital twin. Can you tell few things that you do?"
     PROBING_KEYWORD: "TASKS_COLLECTED"
