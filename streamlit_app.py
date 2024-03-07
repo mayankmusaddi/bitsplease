@@ -122,7 +122,9 @@ def on_user_input():
                 store.update(key, value)
             except Exception as e:
                 store.add(key, value)
+        st.session_state.messages = []
         st.session_state.script_stage = "assemble_user_tasks"
+        st.rerun()
     elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
         for key, value in bot_answer[script_data[script_stage]['PROBING_KEYWORD']].items():
             try:
