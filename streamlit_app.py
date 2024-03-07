@@ -114,7 +114,7 @@ def on_user_input():
         messages = st.session_state.messages
         if len(messages) > 7:
             dag_json = asyncio.run(generate_dag(messages, tools))
-            bot_resp = f"This is what I have planned so far \n{"\n".join(dag_json['task_steps'])}\n {bot_resp}"
+            # bot_resp = f"This is what I have planned so far \n{"\n".join(dag_json['task_steps'])}\n {bot_resp}"
             for key, value in dag_json.items():
                 try:
                     dag_store.fetch(key)
