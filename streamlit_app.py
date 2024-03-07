@@ -95,19 +95,9 @@ def on_user_input():
     script_stage = st.session_state.script_stage
     script_data = st.session_state.script_data
 
-
-
     st.session_state.messages.append({"role": USER, "content": user_input})
     messages = st.session_state.messages.copy()
-
-    system_prompt = script_data[script_stage]['SYSTEM_PROMPT']
-    if script_stage == "run_persona":
-        system_prompt = system_prompt.format(persona=str(store.fetch_all()),
-                                             task_name=str(dag_store.fetch("task_name")),
-                                             input=dag_store.fetch("input"), task_steps=dag_store.fetch("task_steps"))
-    messages = [{"role": SYSTEM, "content": system_prompt}] + messages
     payload = {"messages": messages}
-
     print("REQ: ", payload)
     response = requests.post(
         "http://localhost:10005/predict",
@@ -181,10 +171,19 @@ def app():
         st.session_state.script_stage = "assemble_user_tasks"
 
     if len([message for message in st.session_state.messages if message['role'] == ASSISTANT]) == 0:
+        system_prompt = st.session_state.script_data[st.session_state.script_stage]['SYSTEM_PROMPT']
+        if st.session_state.script_stage == "run_persona":
+            system_prompt = system_prompt.format(persona=str(store.fetch_all()),
+                                                 task_name=str(dag_store.fetch("task_name")),
+                                                 input=dag_store.fetch("input"),
+                                                 task_steps=dag_store.fetch("task_steps"))
+        st.session_state.messages.append(
+            {"role": SYSTEM, "content": system_prompt})
         st.session_state.messages.append(
             {"role": ASSISTANT, "content": st.session_state.script_data[st.session_state.script_stage]['INIT_PROMPT']})
     for i, message in enumerate(st.session_state.messages):  # display all the previous message
-        col2.chat_message(message["role"]).write(message["content"])
+        if message['role'] != SYSTEM:
+            col2.chat_message(message["role"]).write(message["content"])
     col2.chat_input("Enter a user message here.", key="user_input", on_submit=on_user_input)
 
     # Display data in the right column as a flow chart

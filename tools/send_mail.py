@@ -3,7 +3,7 @@ import socket
 PORT = 10006
 
 
-def send_mail(msg):
+async def send_mail(msg):
     """
     Sends a mail
     """
