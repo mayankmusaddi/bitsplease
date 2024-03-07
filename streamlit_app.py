@@ -66,8 +66,7 @@ def update_cols():
             if current_content1:  # Check if the file is not empty
                 # Parse the JSON data
                 st.session_state.current_content1 = json.loads(current_content1)
-            else:
-                st.error('Persona file is empty.')
+
     except FileNotFoundError:
         st.error('Persona file not found.')
     except json.JSONDecodeError:
@@ -80,8 +79,7 @@ def update_cols():
             if current_content2:  # Check if the file is not empty
                 # Parse the JSON data
                 st.session_state.current_content2 = convert_json_to_flow_chart(json.loads(current_content2))
-            else:
-                st.error('DAG file is empty.')
+
     except FileNotFoundError:
         st.error('DAG file not found.')
     except json.JSONDecodeError:
@@ -101,7 +99,11 @@ def on_user_input():
     st.session_state.messages.append({"role": USER, "content": user_input})
     messages = st.session_state.messages.copy()
 
-    messages.append({"role": SYSTEM, "content": script_data[script_stage]['SYSTEM_PROMPT']})
+    system_prompt = script_data[script_stage]['SYSTEM_PROMPT']
+    if script_stage == "run_persona":
+        system_prompt.format(persona=str(store.fetch_all()), task_name=dag_store.fetch("task_name"))
+
+    messages.append({"role": SYSTEM, "content": system_prompt})
     payload = {"messages": messages}
 
     print("REQ: ", payload)
@@ -131,7 +133,7 @@ def on_user_input():
         st.session_state.script_stage = "assemble_user_tasks"
         col2 = st.empty()
         return
-    elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] not in bot_answer:
+    elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] != bot_answer:
         messages = st.session_state.messages
         if "TASK_STEPS" in bot_answer:
             dag_json = asyncio.run(generate_dag(messages, tools))
@@ -143,12 +145,7 @@ def on_user_input():
                     dag_store.update(key, value)
                 except Exception as e:
                     dag_store.add(key, value)
-    elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
-        for key, value in bot_answer[script_data[script_stage]['PROBING_KEYWORD']].items():
-            try:
-                store.fetch(key)
-            except Exception as e:
-                store.add(key, value)
+    elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] == bot_answer:
         st.session_state.script_stage = "finished"
         return
     st.session_state.messages.append({"role": ASSISTANT, "content": bot_resp})
