@@ -153,7 +153,7 @@ def get_script_stage():
     script_stage = "identify_stage"
     script_data = st.session_state.script_data
     st.session_state.messages.append({"role": SYSTEM, "content": script_data[script_stage]['SYSTEM_PROMPT']})
-    st.session_state.messages.append({"role": ASSISTANT, "content": script_data[script_stage]['SYSTEM_PROMPT']})
+    st.session_state.messages.append({"role": ASSISTANT, "content": script_data[script_stage]['INIT_PROMPT']})
     col2.chat_message(ASSISTANT).write(script_data[script_stage]['SYSTEM_PROMPT'])
     col2.chat_input("Enter a user message here.", key="user_input", on_submit=on_user_input)
     user_input = st.session_state.user_input
