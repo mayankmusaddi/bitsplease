@@ -130,7 +130,7 @@ def on_user_input():
         messages = st.session_state.messages
         print(bot_answer)
         if "TASK_STEPS" in bot_answer:
-            dag_json = asyncio.run(generate_dag(messages, tools))
+            dag_json = asyncio.run(generate_dag([messages[-1]], tools))
             print("DAG " +  str(dag_json))
             for key, value in dag_json.items():
                 try:
@@ -139,7 +139,7 @@ def on_user_input():
                 except Exception:
                     dag_store.add(key, value)
     elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] == bot_answer:
-        st.session_state.script_stage = "finished"
+        st.session_state.script_stage = "run_persona"
         return
 
 
@@ -163,9 +163,8 @@ def app():
     col1.title("Persona details")
     if "current_content1" in st.session_state:
         col1.json(st.session_state.current_content1)
-    if st.session_state.script_stage == "finished" :
-        st.session_state.script_stage = "run_persona"
-    elif len(store.fetch_all()) == 0:
+
+    if len(store.fetch_all()) == 0:
         st.session_state.script_stage = "collect_persona"
     elif len(dag_store.fetch_all()) == 0:
         st.session_state.script_stage = "assemble_user_tasks"
