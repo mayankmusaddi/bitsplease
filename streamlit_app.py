@@ -94,12 +94,15 @@ def on_user_input():
     script_stage = st.session_state.script_stage
     script_data = st.session_state.script_data
 
+    if len(store.fetch_all()) > 0 and len(dag_store.fetch_all()) > 0:
+        st.session_state.script_stage = "run_persona"
     st.session_state.messages.append({"role": USER, "content": user_input})
     messages = st.session_state.messages.copy()
 
     system_prompt = script_data[script_stage]['SYSTEM_PROMPT']
     if script_stage == "run_persona":
-        system_prompt.format(persona=str(store.fetch_all()), task_name=dag_store.fetch("task_name"))
+        system_prompt = system_prompt.format(persona=str(store.fetch_all()), task_name=str(dag_store.fetch("task_name")),
+                                             input=dag_store.fetch("input"), task_steps=dag_store.fetch("task_steps"))
 
     messages.append({"role": SYSTEM, "content": system_prompt})
     payload = {"messages": messages}
