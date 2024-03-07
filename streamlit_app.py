@@ -56,15 +56,36 @@ def get_script_data():
 
 
 def update_cols():
-    # Get the current content of the files
-    with open('db_file.json') as f1, open('dag.json') as f2:
-        current_content1 = f1.read()
-        current_content2 = f2.read()
+    # Get the current content of the first file
+    try:
+        with open('db_file.json') as f1:
+            current_content1 = f1.read()
+            if current_content1:  # Check if the file is not empty
+                # Parse the JSON data
+                st.session_state.current_content1 = json.loads(current_content1)
+            else:
+                st.error('Persona file is empty.')
+    except FileNotFoundError:
+        st.error('Persona file not found.')
+    except json.JSONDecodeError:
+        st.error('Error decoding JSON in db_file.json')
 
-    # Update and display JSON content in the left and right columns
-    st.session_state.current_content1 = json.loads(current_content1)
-    st.session_state.current_content2 = convert_json_to_flow_chart(json.loads(current_content2))
-    time.sleep(5)
+    # Get the current content of the second file
+    try:
+        with open('dag.json') as f2:
+            current_content2 = f2.read()
+            if current_content2:  # Check if the file is not empty
+                # Parse the JSON data
+                st.session_state.current_content2 = convert_json_to_flow_chart(json.loads(current_content2))
+            else:
+                st.error('DAG file is empty.')
+    except FileNotFoundError:
+        st.error('DAG file not found.')
+    except json.JSONDecodeError:
+        st.error('Error decoding JSON in dag.json')
+
+    # Wait for 2 seconds before checking again
+    time.sleep(2)
     st.experimental_rerun()
 
 
