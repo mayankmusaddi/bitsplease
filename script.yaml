@@ -6,8 +6,10 @@ collect_persona:
     Need to gather following things using human like conversation from user,
     1 Key: WORK_TITLE , Description: What is user's title at your company 
     2 Key: COMPANY , Description: What is user's company 
-    Till you don't have this info, please continue talking to the user
-    Make sure to respond with '{\"PERSONA_COLLECTED\" : {\"Communication_Style\" : \"PLACEHOLDER1\" , \"Tone_of_Voice\": \"PLACEHOLDER2\", \"WORK_TITLE\":  \"PLACEHOLDER3\",  \"COMPANY\": \"PLACEHOLDER4\"}}'' only when you have finished collecting PLACEHOLDER1, PLACEHOLDER2, PLACEHOLDER3, PLACEHOLDER4.
+    3 Key: NAME , Description: What is user's name 
+
+    Till you don't have this info, please continue talking to the user. Avoid repeating yourself and ask one thing at a time ensuring brevity.
+    Make sure to respond with '{\"PERSONA_COLLECTED\" : {\"Communication_Style\" : \"PLACEHOLDER1\" , \"Tone_of_Voice\": \"PLACEHOLDER2\", \"WORK_TITLE\":  \"PLACEHOLDER3\",  \"COMPANY\": \"PLACEHOLDER4\",  \"NAME\": \"PLACEHOLDER5\"}}'' only when you have finished collecting PLACEHOLDER1, PLACEHOLDER2, PLACEHOLDER3, PLACEHOLDER4, PLACEHOLDER5.
     Start conversation with this message: \"Hi, we will be setting up your digital twin soon. Can you tell few things about yourself?"
     PROBING_KEYWORD: "PERSONA_COLLECTED"
 assemble_user_tasks:
