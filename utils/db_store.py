@@ -33,6 +33,13 @@ class StoreDB:
         self.db[key] = value
         self._persist()
 
+    def fetch_all(self):
+        return self.db
+
+    def clear(self):
+        self.db = {}
+        self._persist()
+
     def fetch(self, key):
         try:
             return self.db[key]

@@ -86,7 +86,6 @@ def update_cols():
 
     # Wait for 2 seconds before checking again
     time.sleep(5)
-    print("+++++++ DEBUG +++++++++")
     st.experimental_rerun()
 
 
@@ -96,12 +95,14 @@ def on_user_input():
     script_data = st.session_state.script_data
 
     # col2.chat_message(USER).write(user_input)
-    # if len([message for message in st.session_state.messages if message['role'] == ASSISTANT]) == 0:
-    #     st.session_state.messages.append({"role": ASSISTANT, "content": script_data[script_stage]['INIT_PROMPT']})
     st.session_state.messages.append({"role": USER, "content": user_input})
     messages = st.session_state.messages.copy()
 
-    messages.append({"role": SYSTEM, "content": script_data[script_stage]['SYSTEM_PROMPT']})
+    system_prompt = script_data[script_stage]['SYSTEM_PROMPT']
+    if script_stage == "run_persona":
+        system_prompt.format(persona=str(store.fetch_all()), task_name=dag_store.fetch("task_name"))
+
+    messages.append({"role": SYSTEM, "content": system_prompt})
     payload = {"messages": messages}
 
     print("REQ: ", payload)
