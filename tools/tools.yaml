@@ -58,6 +58,17 @@
   schema:
     type: object
     properties: {}
+- name: descision_node
+  description: Makes a decision tree using user input
+  schema:
+      type: object
+      properties:
+        query:
+          type: string
+          description: User message
+        options:
+          type: list
+          description: list of options to make a decision from
 - name: get_persona
   description: get digital twin persona whenever needed for things like writing emails ......
   schema:
