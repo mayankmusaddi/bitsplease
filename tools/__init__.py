@@ -7,6 +7,7 @@ from .creative_task import creative_task
 from .send_mail import send_mail
 from .get_reply_mail import get_reply_mail
 from .get_persona import get_persona
+from .decision_node import decision_node
 available_functions = {
     "web_search": web_search,
     "execute_python_code": execute_python_code,
@@ -16,6 +17,6 @@ available_functions = {
     "creative_task": creative_task,
     "send_mail": send_mail,
     "get_reply_mail": get_reply_mail,
-    "get_persona": get_persona
-
+    "get_persona": get_persona,
+    "decision_node": decision_node
 }
