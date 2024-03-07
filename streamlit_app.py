@@ -15,6 +15,8 @@ ASSISTANT = "assistant"
 
 # Set layout to wide
 st.set_page_config(layout="wide")
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 
 # Divide the page into 3 columns
 col1, col2, col3 = st.columns(3)
@@ -29,6 +31,7 @@ hide_streamlit_style = """
                 </style>
                 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 
 def convert_json_to_flow_chart(data):
     # Create a new directed graph
@@ -86,18 +89,15 @@ def update_cols():
 
     # Wait for 2 seconds before checking again
     time.sleep(5)
-    print("+++++++ DEBUG +++++++++")
-    st.experimental_rerun()
+    st.rerun()
 
 
 def on_user_input():
+    global col2
     user_input = st.session_state.user_input
     script_stage = st.session_state.script_stage
     script_data = st.session_state.script_data
 
-    # col2.chat_message(USER).write(user_input)
-    # if len([message for message in st.session_state.messages if message['role'] == ASSISTANT]) == 0:
-    #     st.session_state.messages.append({"role": ASSISTANT, "content": script_data[script_stage]['INIT_PROMPT']})
     st.session_state.messages.append({"role": USER, "content": user_input})
     messages = st.session_state.messages.copy()
 
@@ -120,7 +120,7 @@ def on_user_input():
         pass
     if script_stage == "collect_persona" and script_data[script_stage]['PROBING_KEYWORD'] == bot_answer:
         persona = asyncio.run(generate_persona(st.session_state.messages))
-        print(persona)
+        print(f"PERSONA: {persona}")
         for key, value in persona.items():
             try:
                 store.fetch(key)
@@ -129,11 +129,13 @@ def on_user_input():
                 store.add(key, value)
         st.session_state.messages = []
         st.session_state.script_stage = "assemble_user_tasks"
-        st.rerun()
+        col2 = st.empty()
+        return
     elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] not in bot_answer:
         messages = st.session_state.messages
         if "TASK_STEPS" in bot_answer:
             dag_json = asyncio.run(generate_dag(messages, tools))
+            print(f"DAG: {dag_json}")
             # bot_resp = f"This is what I have planned so far \n{"\n".join(dag_json['task_steps'])}\n {bot_resp}"
             for key, value in dag_json.items():
                 try:
@@ -148,7 +150,7 @@ def on_user_input():
             except Exception as e:
                 store.add(key, value)
         st.session_state.script_stage = "finished"
-    # col2.chat_message(ASSISTANT).write(bot_answer)
+        return
     st.session_state.messages.append({"role": ASSISTANT, "content": bot_resp})
 
 
