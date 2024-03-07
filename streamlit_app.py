@@ -9,6 +9,7 @@ import streamlit as st
 from utils.db_store import store, dag_store
 from tools.generate_dag import generate_dag
 from tools.generate_persona import generate_persona
+
 SYSTEM = "system"
 USER = "user"
 ASSISTANT = "assistant"
@@ -94,14 +95,15 @@ def on_user_input():
     script_stage = st.session_state.script_stage
     script_data = st.session_state.script_data
 
-    if len(store.fetch_all()) > 0 and len(dag_store.fetch_all()) > 0:
-        st.session_state.script_stage = "run_persona"
+
+
     st.session_state.messages.append({"role": USER, "content": user_input})
     messages = st.session_state.messages.copy()
 
     system_prompt = script_data[script_stage]['SYSTEM_PROMPT']
     if script_stage == "run_persona":
-        system_prompt = system_prompt.format(persona=str(store.fetch_all()), task_name=str(dag_store.fetch("task_name")),
+        system_prompt = system_prompt.format(persona=str(store.fetch_all()),
+                                             task_name=str(dag_store.fetch("task_name")),
                                              input=dag_store.fetch("input"), task_steps=dag_store.fetch("task_steps"))
 
     messages.append({"role": SYSTEM, "content": system_prompt})
@@ -166,14 +168,22 @@ def app():
         st.session_state.messages = []
 
     if "script_stage" not in st.session_state:
-        st.session_state.script_stage = "collect_persona"
+        st.session_state.script_stage = "run_persona"
 
     # Display data in the left column
     col1.title("Persona details")
     if "current_content1" in st.session_state:
         col1.json(st.session_state.current_content1)
+    if len(store.fetch_all()) > 0 and len(dag_store.fetch_all()) > 0:
+        st.session_state.script_stage = "run_persona"
+    elif len(store.fetch_all()) == 0:
+        st.session_state.script_stage = "collect_persona"
+    elif len(dag_store.fetch_all()) == 0:
+        st.session_state.script_stage = "assemble_user_tasks"
+
     if len([message for message in st.session_state.messages if message['role'] == ASSISTANT]) == 0:
-        st.session_state.messages.append({"role": ASSISTANT, "content": st.session_state.script_data[st.session_state.script_stage]['INIT_PROMPT']})
+        st.session_state.messages.append(
+            {"role": ASSISTANT, "content": st.session_state.script_data[st.session_state.script_stage]['INIT_PROMPT']})
     for i, message in enumerate(st.session_state.messages):  # display all the previous message
         col2.chat_message(message["role"]).write(message["content"])
     col2.chat_input("Enter a user message here.", key="user_input", on_submit=on_user_input)
