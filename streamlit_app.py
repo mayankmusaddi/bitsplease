@@ -46,9 +46,10 @@ def update_cols():
         current_content2 = f2.read()
 
     # Update and display JSON content in the left and right columns
-    print(f"debug 2: {current_content1}, {current_content2}")
     st.session_state.current_content1 = json.loads(current_content1)
     st.session_state.current_content2 = convert_json_to_flow_chart(json.loads(current_content2))
+    time.sleep(5)
+    st.experimental_rerun()
 
 
 def on_user_input():
@@ -112,34 +113,22 @@ def app():
     if "script_stage" not in st.session_state:
         st.session_state.script_stage = "collect_persona"
 
-    if "current_content1" not in st.session_state:
-        with open('db_file.json') as f1:
-            current_content1 = f1.read()
-        st.session_state.current_content1 = json.loads(current_content1)
-
-    if "current_content2" not in st.session_state:
-        with open('dag.json') as f2:
-            current_content2 = f2.read()
-        st.session_state.current_content2 = convert_json_to_flow_chart(json.loads(current_content2))
-
     # Display data in the left column
     col1.title("Persona details")
-    col1.json(st.session_state.current_content1)
+    if "current_content1" in st.session_state:
+        col1.json(st.session_state.current_content1)
 
     for i, message in enumerate(st.session_state.messages):  # display all the previous message
         col2.chat_message(message["role"]).write(message["content"])
 
     # Display data in the right column as a flow chart
     col3.title("Flow Chart")
-    col3.graphviz_chart(st.session_state.current_content2)
+    if "current_content2" in st.session_state:
+        col3.graphviz_chart(st.session_state.current_content2)
 
     st.chat_input("Enter a user message here.", key="user_input", on_submit=on_user_input)
 
 
 if __name__ == "__main__":
     app()
-    while True:
-        update_cols()
-        print("debug 1")
-        time.sleep(2)
-
+    update_cols()
