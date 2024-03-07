@@ -18,7 +18,8 @@ async def generate_dag(messages: list, tools: list):
     Based on the above tools and the above conversation, I want you generate task steps, task nodes and task links to capture the complete flow that the user describes.
     The format must be a strict JSON, like: 
     {
-        "task_name": "name of the 
+        "task_name": "name of the task",
+        "input": "comma separated unique input args required for executing the task_steps",
         "task_steps": [ "concrete steps, format as Step x: Call xxx tool with xxx: 'xxx' and xxx: 'xxx'" ], 
         "task_nodes": [{"task_id":"TASK_ followed by unique identifier for this task, follow 1-indexing", "task": "task name must be from # TASK LIST #", "name": "define a unique name for this task", "arguments": [ {"name": "parameter name", "value": "parameter value, either a placeholder to be filled by user defined by curly braces or the exact task_id of the tool whose result is required by this node"} ]}], 
         "task_links": [{"source": "source task i task_id", "target": "target task j task_id"}]

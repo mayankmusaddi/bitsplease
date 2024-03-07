@@ -27,10 +27,12 @@ assemble_user_tasks:
     INIT_PROMPT: "Hi, your persona is all set. We are getting closer to set up your digital twin. Can you tell few things that you do?"
     PROBING_KEYWORD: "TASKS_COLLECTED"
 run_persona:
-    SYSTEM_PROMPT: "Act like the persona represented by {persona}. You can do the task: {task_name}. 
+    SYSTEM_PROMPT: "Act like the persona represented by {persona}. You can only do the task: {task_name} that will need {input}.
+    For doing this task you will have to follow these steps {task_steps}. 
     Interact with the user and respond to all user queries adhering to your persona. 
     If user wishes to trigger any task, collection information needed to execute that task and then respond saying RUN_TASK task_name input. 
     You will continue having a conversation with the user until the user gives a confirmation that it is satisfied with the result.
     Respond with PERSONA_DONE when done."
+    INIT_PROMPT: "Hi! How can I assist you?"
     PROBING_KEYWORD: "PERSONA_DONE"
 
