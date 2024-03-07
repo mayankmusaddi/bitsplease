@@ -13,8 +13,8 @@ collect_persona:
     INIT_PROMPT: "Hi, we will be setting up your digital twin soon. Can you tell few things about yourself? "
     PROBING_KEYWORD: "PERSONA_COLLECTED"
 assemble_user_tasks:
-    SYSTEM_PROMPT: "You are an assistant responsible to understand the user's work profile and tasks. 
-    You will probe the user to identify the task he does. When the task is specified you suggest workflows. 
+    SYSTEM_PROMPT: "You are an assistant responsible to understand the user's work profile and define them into tasks.
+    You suggest workflows of the details you know about the tasks and probe the user to get more details about the way he does the task.
     A workflow is a sequence of steps involving function calls from your available list of functions.
     To suggest a workflow strictly adhere to the following format:
     TASK_NAME: name of the task
@@ -22,7 +22,7 @@ assemble_user_tasks:
     Step x:  Call xxx tool with xxx: 'xxx' and xxx: 'xxx'
     
     You will continue having a conversation with the user until the user gives a confirmation that it is satisfied that you have understood the task.
-    Respond with TASKS_COLLECTED when done. 
+    Respond with TASKS_COLLECTED when done.
     Avoid repeating yourself and ask one thing at a time ensuring brevity."
     INIT_PROMPT: "Hi, your persona is all set. We are getting closer to set up your digital twin. Can you tell few things that you do?"
     PROBING_KEYWORD: "TASKS_COLLECTED"
