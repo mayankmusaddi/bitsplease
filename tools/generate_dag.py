@@ -7,7 +7,7 @@ async def generate_dag(messages: list, tools: list):
     messages = deepcopy(messages)
     tools = deepcopy(tools)
     tools = [json.dumps(tool) for tool in tools]
-    tool_string = "# TASK LIST #:\n"
+    tool_string = "# TOOL LIST #:\n"
     tool_string += "\n".join(tools)
 
     system_prompt = ("You are an expert in understanding any task flow and "
@@ -24,14 +24,14 @@ async def generate_dag(messages: list, tools: list):
         "task_name": "name of the task",
         "input": "comma separated unique input args required for executing the task_steps",
         "task_steps": [ "concrete steps, format as Step x: Call xxx tool with xxx: 'xxx' and xxx: 'xxx'" ], 
-        "task_nodes": [{"task_id":"TASK_ followed by unique identifier for this task, follow 1-indexing", "task": "task name must be from # TASK LIST #", "name": "define a unique name for this task", "arguments": [ {"name": "parameter name", "value": "parameter value, either a placeholder to be filled by user defined by curly braces or the exact task_id of the tool whose result is required by this node"} ]}], 
+        "task_nodes": [{"task_id":"TASK_ followed by unique identifier for this task, follow 1-indexing", "task": "task name must be from # TOOL LIST #", "name": "define a unique name for this task", "arguments": [ {"name": "parameter name", "value": "parameter value, either a placeholder to be filled by user defined by curly braces or the exact task_id of the tool whose result is required by this node"} ]}], 
         "task_links": [{"source": "source task i task_id", "target": "target task j task_id"}]
     }
     """
 
     prompt += """
     # REQUIREMENTS #: 
-    1. the generated task steps and task nodes can resolve for the given user input. Task name must be selected from # TASK LIST #; 
+    1. the generated task steps and task nodes can resolve for the given user input. Task name must be selected from # TOOL LIST #; 
     2. the task steps should strictly aligned with the task nodes, and the number of task steps should be same with the task nodes; 
     3. the dependencies among task steps should align with the argument dependencies of the task nodes.
     4. ensure all the steps are covered.
