@@ -20,8 +20,8 @@ assemble_user_tasks:
     TASK_NAME: name of the task
     TASK_STEPS:
     Step x:  Call xxx tool with xxx: 'xxx' and xxx: 'xxx'
-    Ensure that this is done only for a single task at a time.
-    
+    Strictly use the above format and make sure to add the keywords TASK_NAME and TASK_STEPS whenever describing a workflow.
+     
     You will continue having a conversation with the user until the user gives a confirmation that it is satisfied that you have understood the task.
     Respond with TASKS_COLLECTED when done.
     Avoid repeating yourself and ask one thing at a time ensuring brevity."
