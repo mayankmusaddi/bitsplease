@@ -144,14 +144,6 @@ def on_user_input():
                     dag_store.update(key, value)
                 except Exception as e:
                     dag_store.add(key, value)
-    elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
-        for key, value in bot_answer[script_data[script_stage]['PROBING_KEYWORD']].items():
-            try:
-                store.fetch(key)
-            except Exception as e:
-                store.add(key, value)
-        st.session_state.script_stage = "finished"
-    # col2.chat_message(ASSISTANT).write(bot_answer)
     st.session_state.messages.append({"role": ASSISTANT, "content": bot_resp})
 
 
