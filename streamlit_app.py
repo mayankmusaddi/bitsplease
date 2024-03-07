@@ -127,7 +127,7 @@ def on_user_input():
         st.rerun()
     elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] not in bot_answer:
         messages = st.session_state.messages
-        if "TASK_STEPS" in messages[-1]["content"]:
+        if "TASK_STEPS" in bot_answer:
             dag_json = asyncio.run(generate_dag(messages, tools))
             # bot_resp = f"This is what I have planned so far \n{"\n".join(dag_json['task_steps'])}\n {bot_resp}"
             for key, value in dag_json.items():
