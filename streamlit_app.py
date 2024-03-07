@@ -94,6 +94,8 @@ def on_user_input():
     script_stage = st.session_state.script_stage
     script_data = st.session_state.script_data
 
+    if len(store.fetch_all()) > 0 and len(dag_store.fetch_all()) > 0:
+        st.session_state.script_stage = "run_persona"
     st.session_state.messages.append({"role": USER, "content": user_input})
     messages = st.session_state.messages.copy()
 
