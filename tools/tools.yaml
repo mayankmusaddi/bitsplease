@@ -9,7 +9,7 @@
       required:
         - query
 - name: execute_python_code
-  description: execute python code, has to be compilable only python code, always write print in the end to get the output
+  description: executes basic python code for simple math, has to be compilable only python code, always write print in the end to get the output
   schema:
     type: object
     properties:
@@ -18,16 +18,6 @@
         description: python code
       required:
         - code
-- name: web_scraper
-  description: scrape data from the web
-  schema:
-    type: object
-    properties:
-      url:
-        type: string
-        description: the URL to scrape data from
-      required:
-        - url
 - name: fetch_all_products_description
   description: Fetch few-line description of all products offered by Sprinklr.
   schema:

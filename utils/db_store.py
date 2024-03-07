@@ -58,7 +58,7 @@ class StoreDB:
 
 
 store = StoreDB()
-
+dag_store = StoreDB(db_file='./dag.json')
 
 """
 Usage:

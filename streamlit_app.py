@@ -3,9 +3,11 @@ import yaml
 import time
 import requests
 import graphviz as gv
+import asyncio
 import streamlit as st
 
-from utils.db_store import store
+from utils.db_store import store, dag_store
+from tools.generate_dag import generate_dag
 
 SYSTEM = "system"
 USER = "user"
@@ -17,6 +19,16 @@ st.set_page_config(layout="wide")
 # Divide the page into 3 columns
 col1, col2, col3 = st.columns(3)
 
+hide_streamlit_style = """
+                <style>
+                div[data-testid="stStatusWidget"] {
+                visibility: hidden;
+                height: 0%;
+                position: fixed;
+                }
+                </style>
+                """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 def convert_json_to_flow_chart(data):
     # Create a new directed graph
@@ -24,13 +36,17 @@ def convert_json_to_flow_chart(data):
 
     # Add nodes to the graph
     for node in data['task_nodes']:
-        g.node(node['task_id'], node['task'])
+        g.node(node['task_id'], node['name'] + "\n" + node['task'])
 
     # Add edges to the graph
     for link in data['task_links']:
         g.edge(link['source'], link['target'])
 
     return g
+
+
+with open('tools/tools.yaml', 'r') as yaml_file:
+    tools = yaml.safe_load(yaml_file)  # Load YAML data
 
 
 def get_script_data():
@@ -94,6 +110,17 @@ def on_user_input():
                 store.add(key, value)
         st.session_state.script_stage = "finished"
     # col2.chat_message(ASSISTANT).write(bot_answer)
+    elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] not in bot_answer:
+        messages = st.session_state.messages
+        if len(messages) > 7:
+            dag_json = asyncio.run(generate_dag(messages, tools))
+            bot_resp = f"This is what I have planned so far \n{"\n".join(dag_json['task_steps'])}\n {bot_resp}"
+            for key, value in dag_json.items():
+                try:
+                    dag_store.fetch(key)
+                    dag_store.update(key, value)
+                except Exception as e:
+                    dag_store.add(key, value)
     st.session_state.messages.append({"role": ASSISTANT, "content": bot_resp})
 
 
@@ -120,13 +147,12 @@ def app():
 
     for i, message in enumerate(st.session_state.messages):  # display all the previous message
         col2.chat_message(message["role"]).write(message["content"])
+    col2.chat_input("Enter a user message here.", key="user_input", on_submit=on_user_input)
 
     # Display data in the right column as a flow chart
     col3.title("Flow Chart")
     if "current_content2" in st.session_state:
         col3.graphviz_chart(st.session_state.current_content2)
-
-    st.chat_input("Enter a user message here.", key="user_input", on_submit=on_user_input)
 
 
 if __name__ == "__main__":
