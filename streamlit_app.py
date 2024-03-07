@@ -105,8 +105,7 @@ def on_user_input():
         system_prompt = system_prompt.format(persona=str(store.fetch_all()),
                                              task_name=str(dag_store.fetch("task_name")),
                                              input=dag_store.fetch("input"), task_steps=dag_store.fetch("task_steps"))
-
-    messages.append({"role": SYSTEM, "content": system_prompt})
+    messages = [{"role": SYSTEM, "content": system_prompt}] + messages
     payload = {"messages": messages}
 
     print("REQ: ", payload)
