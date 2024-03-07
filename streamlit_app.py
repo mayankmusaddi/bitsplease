@@ -140,6 +140,8 @@ def on_user_input():
                     dag_store.add(key, value)
     elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] == bot_answer:
         st.session_state.script_stage = "run_persona"
+        st.session_state.messages = []
+        col2 = st.empty()
         return
 
 
