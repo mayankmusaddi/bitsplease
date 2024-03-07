@@ -6,6 +6,7 @@ from .fetch_vertical_specific_products import fetch_vertical_specific_products
 from .creative_task import creative_task
 from .send_mail import send_mail
 from .get_reply_mail import get_reply_mail
+from .get_persona import get_persona
 available_functions = {
     "web_search": web_search,
     "execute_python_code": execute_python_code,
@@ -14,5 +15,7 @@ available_functions = {
     "fetch_specific_products_description": fetch_specific_product_description,
     "creative_task": creative_task,
     "send_mail": send_mail,
-    "get_reply_mail": get_reply_mail
+    "get_reply_mail": get_reply_mail,
+    "get_persona": get_persona
+
 }
