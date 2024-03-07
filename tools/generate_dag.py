@@ -1,8 +1,11 @@
 from utils.openai_utils import openai_call
 import json
+from copy import deepcopy
 
 
 async def generate_dag(messages: list, tools: list):
+    messages = deepcopy(messages)
+    tools = deepcopy(tools)
     tools = [json.dumps(tool) for tool in tools]
     tool_string = "# TASK LIST #:\n"
     tool_string += "\n".join(tools)
@@ -13,7 +16,7 @@ async def generate_dag(messages: list, tools: list):
     prompt = tool_string + """
 
     The above conversation describes how the user achieves a particular task using an example. We need to create a defined flow taking any generic example as input.
-
+    ENSURE ALL TASK_STEPS in latest TASK_STEPS are used to create task_steps. Length must be the same
     # GOAL #:
     Based on the above tools and the above conversation, I want you generate task steps, task nodes and task links to capture the complete flow that the user describes.
     The format must be a strict JSON, like: 
@@ -38,8 +41,7 @@ async def generate_dag(messages: list, tools: list):
     8. the task nodes and task steps when connected should create only one connected graph."""
 
     if messages[0]["role"] != "system":
-        messages = [{"role": "system", "content": ""}] + messages
-    messages[0]["content"] = system_prompt
+        messages = [{"role": "system", "content": system_prompt}] + messages
     messages += [{"role": "user", "content": prompt}]
 
     _response, _ = await openai_call(system_prompt, messages)

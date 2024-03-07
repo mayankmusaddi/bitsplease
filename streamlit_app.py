@@ -108,10 +108,11 @@ def on_user_input():
 
     bot_resp = response["results"]
     bot_answer = bot_resp
-    try:
-        bot_answer = json.loads(bot_resp)
-    except Exception:
-        pass
+    print(script_stage)
+    print(bot_answer)
+    print(script_data)
+    st.session_state.messages.append({"role": ASSISTANT, "content": bot_resp})
+
     if script_stage == "collect_persona" and script_data[script_stage]['PROBING_KEYWORD'] == bot_answer:
         persona = asyncio.run(generate_persona(st.session_state.messages))
         print(f"PERSONA: {persona}")
@@ -125,22 +126,21 @@ def on_user_input():
         st.session_state.script_stage = "assemble_user_tasks"
         col2 = st.empty()
         return
-    elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] != bot_answer:
+    elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] != bot_answer  :
         messages = st.session_state.messages
+        print(bot_answer)
         if "TASK_STEPS" in bot_answer:
             dag_json = asyncio.run(generate_dag(messages, tools))
-            print(f"DAG: {dag_json}")
-            # bot_resp = f"This is what I have planned so far \n{"\n".join(dag_json['task_steps'])}\n {bot_resp}"
+            print("DAG " +  str(dag_json))
             for key, value in dag_json.items():
                 try:
                     dag_store.fetch(key)
                     dag_store.update(key, value)
-                except Exception as e:
+                except Exception:
                     dag_store.add(key, value)
     elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] == bot_answer:
         st.session_state.script_stage = "finished"
         return
-    st.session_state.messages.append({"role": ASSISTANT, "content": bot_resp})
 
 
 def app():
@@ -163,7 +163,7 @@ def app():
     col1.title("Persona details")
     if "current_content1" in st.session_state:
         col1.json(st.session_state.current_content1)
-    if len(store.fetch_all()) > 0 and len(dag_store.fetch_all()) > 0:
+    if st.session_state.script_stage == "finished" :
         st.session_state.script_stage = "run_persona"
     elif len(store.fetch_all()) == 0:
         st.session_state.script_stage = "collect_persona"
