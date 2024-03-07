@@ -125,17 +125,9 @@ def on_user_input():
         st.session_state.messages = []
         st.session_state.script_stage = "assemble_user_tasks"
         st.rerun()
-    elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
-        for key, value in bot_answer[script_data[script_stage]['PROBING_KEYWORD']].items():
-            try:
-                store.fetch(key)
-            except Exception as e:
-                store.add(key, value)
-        st.session_state.script_stage = "finished"
-    # col2.chat_message(ASSISTANT).write(bot_answer)
     elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] not in bot_answer:
         messages = st.session_state.messages
-        if len(messages) > 7:
+        if "TASK_STEPS" in messages[-1]["content"]:
             dag_json = asyncio.run(generate_dag(messages, tools))
             # bot_resp = f"This is what I have planned so far \n{"\n".join(dag_json['task_steps'])}\n {bot_resp}"
             for key, value in dag_json.items():
@@ -144,6 +136,14 @@ def on_user_input():
                     dag_store.update(key, value)
                 except Exception as e:
                     dag_store.add(key, value)
+    elif script_stage == "assemble_user_tasks" and script_data[script_stage]['PROBING_KEYWORD'] in bot_answer:
+        for key, value in bot_answer[script_data[script_stage]['PROBING_KEYWORD']].items():
+            try:
+                store.fetch(key)
+            except Exception as e:
+                store.add(key, value)
+        st.session_state.script_stage = "finished"
+    # col2.chat_message(ASSISTANT).write(bot_answer)
     st.session_state.messages.append({"role": ASSISTANT, "content": bot_resp})
 
 
