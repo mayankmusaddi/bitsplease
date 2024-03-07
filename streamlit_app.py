@@ -63,8 +63,7 @@ def update_cols():
             if current_content1:  # Check if the file is not empty
                 # Parse the JSON data
                 st.session_state.current_content1 = json.loads(current_content1)
-            else:
-                st.error('Persona file is empty.')
+            
     except FileNotFoundError:
         st.error('Persona file not found.')
     except json.JSONDecodeError:
@@ -77,8 +76,7 @@ def update_cols():
             if current_content2:  # Check if the file is not empty
                 # Parse the JSON data
                 st.session_state.current_content2 = convert_json_to_flow_chart(json.loads(current_content2))
-            else:
-                st.error('DAG file is empty.')
+            
     except FileNotFoundError:
         st.error('DAG file not found.')
     except json.JSONDecodeError:
