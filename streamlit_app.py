@@ -30,6 +30,7 @@ hide_streamlit_style = """
                 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
+
 def convert_json_to_flow_chart(data):
     # Create a new directed graph
     g = gv.Digraph(format='svg')
@@ -91,9 +92,10 @@ def update_cols():
 
 def on_user_input():
     user_input = st.session_state.user_input
+    if "script_stage" not in st.session_state:
+        return
     script_stage = st.session_state.script_stage
     script_data = st.session_state.script_data
-
     # col2.chat_message(USER).write(user_input)
     st.session_state.messages.append({"role": USER, "content": user_input})
     messages = st.session_state.messages.copy()
@@ -147,6 +149,36 @@ def on_user_input():
     st.session_state.messages.append({"role": ASSISTANT, "content": bot_resp})
 
 
+def get_script_stage():
+    script_stage = "identify_stage"
+    script_data = st.session_state.script_data
+    st.session_state.messages.append({"role": SYSTEM, "content": script_data[script_stage]['SYSTEM_PROMPT']})
+    st.session_state.messages.append({"role": ASSISTANT, "content": script_data[script_stage]['SYSTEM_PROMPT']})
+    col2.chat_message(ASSISTANT).write(script_data[script_stage]['SYSTEM_PROMPT'])
+    col2.chat_input("Enter a user message here.", key="user_input", on_submit=on_user_input)
+    user_input = st.session_state.user_input
+    messages = st.session_state.messages.copy()
+    messages.append({"role": SYSTEM, "content": script_data[script_stage]['SYSTEM_PROMPT']})
+    payload = {"messages": messages}
+
+    print("REQ: ", payload)
+    response = requests.post(
+        "http://localhost:10005/predict",
+        json=payload,
+    )
+    response = response.json()
+    print("RESP: ", response)
+
+    bot_resp = response["results"]
+    bot_answer = bot_resp
+    try:
+        bot_answer = json.loads(bot_resp)
+    except Exception:
+        pass
+    if bot_answer.lower() != "none":
+        st.session_state.script_stage = bot_answer
+
+
 def app():
     if "last_content1" not in st.session_state:
         st.session_state.last_content1 = None
@@ -161,7 +193,8 @@ def app():
         st.session_state.messages = []
 
     if "script_stage" not in st.session_state:
-        st.session_state.script_stage = "collect_persona"
+        st.session_state.script_stage = get_script_stage()
+        # st.session_state.script_stage = "collect_persona"
 
     # Display data in the left column
     col1.title("Persona details")
