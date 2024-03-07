@@ -33,8 +33,9 @@ async def generate_dag(messages: list, tools: list):
     3. the dependencies among task steps should align with the argument dependencies of the task nodes.
     4. ensure all the steps are covered.
     5. make the first task step take in general input instead of a particular usecase.
-    6. avoid using execute_python_code unless it is for mathematical reasoning. 
-    7. only respond the json, say nothing else"""
+    6. avoid using execute_python_code unless it is for mathematical reasoning.
+    7. only respond the json, say nothing else
+    8. the task nodes and task steps when connected should create only one connected graph."""
 
     if messages[0]["role"] != "system":
         messages = [{"role": "system", "content": ""}] + messages
