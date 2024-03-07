@@ -178,7 +178,6 @@ def get_script_stage():
     if bot_answer.lower() != "none":
         st.session_state.script_stage = bot_answer
 
-
 def app():
     if "last_content1" not in st.session_state:
         st.session_state.last_content1 = None
@@ -192,8 +191,9 @@ def app():
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    if "script_stage" not in st.session_state:
-        st.session_state.script_stage = get_script_stage()
+    while "script_stage" not in st.session_state:
+        get_script_stage()
+        on_user_input()
         # st.session_state.script_stage = "collect_persona"
 
     # Display data in the left column
